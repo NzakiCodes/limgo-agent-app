@@ -1,16 +1,23 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { View, Text, Card, Button } from 'react-native-ui-lib';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import CreatePassword from './screens/auth/createpassword';
+import ForgotPassword from './screens/auth/forgotPassword';
+import RecoveryCode from './screens/auth/recoveryCode';
+import SignIn from './screens/auth/signin';
+import SignUp from './screens/auth/signup';
+import VerifyPhone from './screens/auth/verifyPhoneNumber';
 
 export default function App() {
   return (
-    <View flex padding-page>
-      <Text heading marginB-s4>My Screen</Text>
-      <Card height={100} center padding-card marginB-s4>
-        <Text body>This is an example card </Text>
-      </Card>
-      <Button label="Button" body bg-primaryColor square></Button>
+    <SafeAreaProvider>
+      {/* <SignUp/> */}
+      {/* <SignIn/> */}
+      {/* <CreatePassword/> */}
+      <VerifyPhone/>
+      {/* <ForgotPassword/> */}
+      {/* <RecoveryCode/> */}
       <StatusBar style="auto" />
-    </View>
+    </SafeAreaProvider>
   );
 }
