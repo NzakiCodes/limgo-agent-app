@@ -3,13 +3,25 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, Button } from 'react-native-ui-lib';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
+import { Alert } from 'react-native';
 
 
 const backIcon = require("../../assets/icons/chevron-left.png");
 
-
-const VerifyPhone = () => {
+const VerifyPhone = ({ navigation }) => {
     const [code, setCode] = useState('');
+    const sampleCode = '1234';
+
+    const onSubmit = () => {
+        if (code !== sampleCode) {
+            Alert.alert('Wrong Code', 'Please Enter a Correct Verification code sent to you.');
+            return 0
+        }
+        else {
+            navigation.navigate("Home")
+        }
+    }
+
 
     return (
         <SafeAreaView style={{ paddingVertical: 45, paddingHorizontal: 15, backgroundColor: '#ffffff', height: '100%' }}>
@@ -20,13 +32,14 @@ const VerifyPhone = () => {
                         style={{ width: 44, height: 44, marginLeft: 0, marginBottom: 18 }}
                         color={"#4B4D5A"}
                         backgroundColor={"#F7F7F7"}
+                        onPress={() => navigation.goBack()}
                     />
                     <View style={{ paddingHorizontal: 10 }}>
                         <Text black text20BL style={{ fontWeight: "bold", width: 225 }}>Verify Phone Number</Text>
                         <Text color="#2E384D" >Enter the four digit code sent to your phone</Text>
 
                     </View>
-                    <View style={{marginVertical:60}}>
+                    <View style={{ marginVertical: 60 }}>
                         <SmoothPinCodeInput
                             placeholder={<View style={{
                                 width: 14,
@@ -48,6 +61,7 @@ const VerifyPhone = () => {
                             cellStyleFocused={{
                                 borderColor: '#00923F',
                             }}
+                            codeLength={4}
                             textStyle={{
                                 color: "#00923F",
                                 fontSize: 32,
@@ -68,6 +82,7 @@ const VerifyPhone = () => {
                         label="Verify"
                         labelStyle={{ fontSize: 18, fontWeight: 'bold' }}
                         style={{ backgroundColor: '#00923f', height: 58, marginVertical: 20, borderRadius: 24 }}
+                        onPress={() => onSubmit()}
                     />
                 </View>
             </ScrollView>

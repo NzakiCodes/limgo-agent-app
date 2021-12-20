@@ -3,7 +3,8 @@ import { View } from 'react-native-ui-lib';
 import { TextInput, Text } from 'react-native';
 
 
-const TextField = ({ title, textBold, securePassword, placeholder, textStyle, placeholderTextColor, inputStyle }) => {
+const TextField = (props) => {
+    const { title, textBold, securePassword, placeholder, textStyle, placeholderTextColor, inputStyle, value, onChangeText } = props;
     const [securePasswordState, setSecurePassword] = useState(false);
 
     useEffect(() => {
@@ -20,6 +21,7 @@ const TextField = ({ title, textBold, securePassword, placeholder, textStyle, pl
                     ...textStyle
                 }}>{title}</Text>
             <TextInput
+                {...props}
                 secureTextEntry={securePassword}
                 placeholder={placeholder ? placeholder : title}
                 style={{
@@ -31,11 +33,12 @@ const TextField = ({ title, textBold, securePassword, placeholder, textStyle, pl
                     borderColor: "#D6D6D6",
                     borderRadius: 24,
                     fontSize: 18,
-                    fontStyle: 'italic',
+                    // fontStyle: 'italic',
                     color: '#00923F',
                     ...inputStyle
                 }}
                 placeholderTextColor={placeholderTextColor}
+                value={value}
             />
         </View>
     )

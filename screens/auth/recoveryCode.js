@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, Text, Button} from 'react-native-ui-lib';
+import { View, Text, Button } from 'react-native-ui-lib';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 
 const backIcon = require("../../assets/icons/chevron-left.png");
 
 
-const RecoveryCode = () => {
+const RecoveryCode = ({ navigation }) => {
     const [code, setCode] = useState('');
 
     return (
@@ -19,6 +19,7 @@ const RecoveryCode = () => {
                         style={{ width: 44, height: 44, marginLeft: -15, marginBottom: 18 }}
                         color={"#ffffff"}
                         backgroundColor={"#00923F"}
+                        onPress={() => navigation.goBack()}
                     />
                     <Text white text20BL style={{ fontWeight: "bold", width: 255, marginBottom: 16 }}>Enter 4-digit recovery code</Text>
                     <Text color="#FDFDFD" style={{ opacity: 0.7, fontSize: 14 }}  >The recovery code was sent to your email. Please enter the code:</Text>
@@ -55,11 +56,11 @@ const RecoveryCode = () => {
                     />
                 </View>
                 <View style={{ alignItems: 'center', justifyContent: "center", flexDirection: 'row', position: 'absolute', bottom: 0 }}>
-                    <Text style={{color:'#FDFDFD', opacity:0.59, fontSize:15}}>
+                    <Text style={{ color: '#FDFDFD', opacity: 0.59, fontSize: 15 }}>
                         Didn&apos;t receive it? {' '}
 
                     </Text>
-                    <Button link linkColor="#FDFDFD" label="Resend Code" />
+                    <Button link linkColor="#FDFDFD" onPress={() => navigation.navigate("ForgotPassword", { resend: true })} label="Resend Code" />
                 </View>
             </ScrollView>
         </SafeAreaView>
