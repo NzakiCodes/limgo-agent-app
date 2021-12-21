@@ -4,7 +4,7 @@ import { TextInput, Text } from 'react-native';
 
 
 const TextField = (props) => {
-    const { title, textBold, securePassword, placeholder, textStyle, placeholderTextColor, inputStyle, value, onChangeText } = props;
+    const { title, textBold, securePassword, placeholder, textStyle, placeholderTextColor, inputStyle, value, onChangeText, error } = props;
     const [securePasswordState, setSecurePassword] = useState(false);
 
     useEffect(() => {
@@ -28,13 +28,14 @@ const TextField = (props) => {
                     height: 58,
                     borderWidth: 1,
                     paddingHorizontal: 20,
-                    paddingVertical: 10,
+                    paddingTop: 10,
+                    paddingBottom: 5,
                     marginVertical: 5,
-                    borderColor: "#D6D6D6",
+                    borderColor: `${error ? "#e90000" : "#D6D6D6"}`,
                     borderRadius: 24,
                     fontSize: 18,
                     // fontStyle: 'italic',
-                    color: '#00923F',
+                    color: `${error ? "#e90000" : "#00923F"}`,
                     ...inputStyle
                 }}
                 placeholderTextColor={placeholderTextColor}

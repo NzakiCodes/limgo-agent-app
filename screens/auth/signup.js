@@ -11,13 +11,40 @@ const logo = require("../../assets/images/logo_icon.png");
 const SignUp = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [error, setError] = useState({
+        email: {
+            errorValue: false,
+            message: ""
+        },
+        phoneNumber: {
+            errorValue: false,
+            message: ""
+        }
+    })
 
     const onSubmit = () => {
         if (email === '' && email.length < 4) {
-            Alert.alert('Invalid Email', 'You sure say na your email be this.');
+            
+            setError({
+                email: {
+                    errorValue: true,
+                    message: 'Please enter a correct Email'
+                }, phoneNumber: {
+                    errorValue: false,
+                    message: ''
+                }
+            })
             return null;
-        } else if (phoneNumber === '' && phoneNumber.length < 11) {
-            Alert.alert('Invalid Phone Number', 'Your Phone Number you no sabi.');
+        } else if ( phoneNumber.length < 11) {
+            setError({
+                email: {
+                    errorValue: false,
+                    message: ''
+                }, phoneNumber: {
+                    errorValue: true,
+                    message: 'Please enter a correct Phone Number'
+                }
+            })
             return null;
         } else {
             navigation.navigate("CreatePassword", {
@@ -38,8 +65,12 @@ const SignUp = ({ navigation }) => {
                     <Text grey30>Welcome to Limgo Logistics</Text>
 
                     <View style={{ marginVertical: 20 }}>
-                        <TextField textBold title={"Email Address"} securePassword={false} value={email} onChangeText={(text) => setEmail(text)} />
-                        <TextField textBold title={"Phone Number"} keyboardType='phone-pad' value={phoneNumber} onChangeText={(text) => setPhoneNumber(text)} />
+                        <TextField error={error.email.errorValue} textBold title={"Email Address"} securePassword={false} value={email} onChangeText={(text) => setEmail(text)} />
+                        <Text style={{ color: '#e90000' }}>{error.email.errorValue ? error.email.message : ''}</Text>
+
+                        <TextField error={error.phoneNumber.errorValue} textBold title={"Phone Number"} keyboardType='phone-pad' value={phoneNumber} onChangeText={(text) => setPhoneNumber(text)} />
+                        <Text style={{ color: '#e90000' }}>{error.phoneNumber.errorValue ? error.phoneNumber.message : ''}</Text>
+
                         <Button label="Next" onPress={() => onSubmit()} paddingV style={{ backgroundColor: '#00923f', paddingVertical: 20, marginVertical: 20, }} square></Button>
                     </View>
                 </View>
