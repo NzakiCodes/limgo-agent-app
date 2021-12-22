@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Animated, StyleSheet, Dimensions } from 'react-native';
+import { Animated, StyleSheet, Dimensions, ImageBackground } from 'react-native';
 import { View, Text, Image, Button } from 'react-native-ui-lib';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import HomeScreen from './home';
 
 const logo = require("../assets/images/logo.png");
-const deliveryImage = require("../assets/images/experimental-delivery-11.png")
+const deliveryImage = require("../assets/images/experimental-delivery-11.png");
+// const background = require("../assets/images/bckground.png");
+const backgroundTop = require("../assets/images/backgroundTop.png");
+const backgroundBottom = require("../assets/images/backgroundBottom.png");
 
 
 const OnBoarding = ({ navigation }) => {
@@ -49,8 +52,8 @@ const OnBoardingScreen = ({ navigation }) => {
     const slideInBottomAnim = useRef(new Animated.Value(-400)).current;
 
 
-    const windowWidth = Dimensions.get('window').width;
-    const screenWidth = Dimensions.get('screen').width;
+    // const windowWidth = Dimensions.get('window').width;
+    // const screenWidth = Dimensions.get('screen').width;
     const windowHeight = Dimensions.get('window').height;
     const animationDuration = 1000;
     useEffect(() => {
@@ -74,14 +77,17 @@ const OnBoardingScreen = ({ navigation }) => {
     }
 
     return (
-        <SafeAreaView style={{ paddingVertical: 120, paddingHorizontal: 25, backgroundColor: '#00923F', height: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
+        <SafeAreaView style={{ paddingVertical: 120, paddingHorizontal: 25, backgroundColor: '#00923F', height: '100%', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
+            <Image style={{ width: 660, height: 430, position: 'absolute', top: -160 }} source={backgroundTop} />
+            <Image style={{ width: 485, height: 690, position: 'absolute', bottom: -260, left: 0 }} source={backgroundBottom} />
+
             <View style={{ width: 222 }}>
                 <Text style={{ color: '#FFFFFF', fontSize: 30, textAlign: 'center' }}>
                     Your one stop {"\n"} for your pick-up and delivery
                 </Text>
             </View>
             <View style={{ position: 'relative', }}>
-                <View style={{ backgroundColor: '#26b865', height: 173, width: 173, borderRadius: 9999, position: 'absolute', left: '22%' }}></View>
+                <View style={{ backgroundColor: '#26b865', height: 188, width: 188, borderRadius: 9999, position: 'absolute', left: '10%' }}></View>
                 <Animated.View
                     style={[
                         styles.deliveryManContainer,

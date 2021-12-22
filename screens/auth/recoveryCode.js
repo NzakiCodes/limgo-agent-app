@@ -3,12 +3,32 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, Button } from 'react-native-ui-lib';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
+import AuthApi from '../../api/auth';
+var axios = require('axios');
+var FormData = require('form-data');
+var data = new FormData();
 
 const backIcon = require("../../assets/icons/chevron-left.png");
 
 
-const RecoveryCode = ({ navigation }) => {
+const RecoveryCode = ({ route, navigation }) => {
     const [code, setCode] = useState('');
+    const { phoneNumber } = route.params;
+
+    useEffect(async () => {
+        try {
+            const res = await AuthApi.ForgotPassword();
+        } catch (error) {
+
+        }
+    }, [])
+
+    const onFulfill = () => {
+        data.append('verification_code', code);
+        data.append('phone_number', phoneNumber);
+
+
+    }
 
     return (
         <SafeAreaView style={{ paddingVertical: 45, paddingHorizontal: 25, backgroundColor: '#00923F', height: '100%' }}>
@@ -53,6 +73,7 @@ const RecoveryCode = ({ navigation }) => {
                         codeLength={4}
                         value={code}
                         onTextChange={code => setCode(code)}
+                        onFulfill={() => onFulfill()}
                     />
                 </View>
                 <View style={{ alignItems: 'center', justifyContent: "center", flexDirection: 'row', position: 'absolute', bottom: 0 }}>

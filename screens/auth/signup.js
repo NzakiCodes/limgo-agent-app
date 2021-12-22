@@ -24,18 +24,19 @@ const SignUp = ({ navigation }) => {
 
     const onSubmit = () => {
         if (email === '' && email.length < 4) {
-            
+
             setError({
                 email: {
                     errorValue: true,
                     message: 'Please enter a correct Email'
-                }, phoneNumber: {
+                },
+                phoneNumber: {
                     errorValue: false,
                     message: ''
                 }
             })
             return null;
-        } else if ( phoneNumber.length < 11) {
+        } else if (phoneNumber.length < 11) {
             setError({
                 email: {
                     errorValue: false,
@@ -53,6 +54,7 @@ const SignUp = ({ navigation }) => {
             })
         }
     }
+    
 
     return (
         <SafeAreaView style={{ marginTop: 45, marginBottom: 30, marginHorizontal: 30, height: '100%' }}>

@@ -14,6 +14,7 @@ import VerifyPhone from './screens/auth/verifyPhoneNumber';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import OnBoarding from './screens/onboarding';
+import UpdatePassword from './screens/auth/updatePassword';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +30,7 @@ export default function App() {
           <Stack.Screen name='SignIn' options={{ headerShown: false }} component={SignIn} />
           <Stack.Screen name='ForgotPassword' options={{ headerShown: false }} component={ForgotPassword} />
           <Stack.Screen name='RecoveryCode' options={{ headerShown: false }} component={RecoveryCode} />
+          <Stack.Screen name='UpdatePassword' options={{ headerShown: false }} component={UpdatePassword} />
           <Stack.Screen name='Home' options={{ title:'Limgo Agent' }} component={HomeScreen} />
         </Stack.Navigator>
       </NavigationContainer>

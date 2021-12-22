@@ -4,24 +4,34 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, Button } from 'react-native-ui-lib';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 import { Alert } from 'react-native';
+import AuthApi from '../../api/auth';
 
 
 const backIcon = require("../../assets/icons/chevron-left.png");
 
-const VerifyPhone = ({ navigation }) => {
+const VerifyPhone = ({ route, navigation }) => {
     const [code, setCode] = useState('');
     const sampleCode = '1234';
+    const { phoneNumber } = route.params;
 
-    const onSubmit = () => {
-        if (code !== sampleCode) {
-            Alert.alert('Wrong Code', 'Please Enter a Correct Verification code sent to you.');
-            return 0
-        }
-        else {
+
+    const onSubmit = async () => {
+        const res = await verifyUserOTP();
+
+        if (res.status === 200) {
             navigation.navigate("Home")
         }
     }
 
+    async function verifyUserOTP() {
+        const data = JSON.stringify({ "code": code, "phoneNumber": phoneNumber })
+        try {
+            const res = await AuthApi.VerifyOTP(data);
+            return res
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     return (
         <SafeAreaView style={{ paddingVertical: 45, paddingHorizontal: 15, backgroundColor: '#ffffff', height: '100%' }}>

@@ -3,26 +3,18 @@ import { Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, Image, Button } from 'react-native-ui-lib';
-import AuthApi from '../../api/auth';
-import axios from 'axios';
 import TextField from '../../components/atoms/TextField';
-// var FormData = require('form-data');
-
 
 const logo = require("../../assets/images/logo_icon.png");
 const backIcon = require("../../assets/icons/chevron-left.png");
 
 
-const CreatePassword = ({ route, navigation }) => {
+const UpdatePassword = ({ route, navigation }) => {
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
     const { email, phoneNumber } = route.params;
-    const [error, setError] = useState({
-        errorValue: false,
-        message: ""
-    })
 
-    const onSubmit = async () => {
+    const onSubmit = () => {
         if (password === '') {
             Alert.alert('Enter Password', 'Please Enter a Password')
             return 0
@@ -31,36 +23,37 @@ const CreatePassword = ({ route, navigation }) => {
             return 0
         }
         else {
-            var res = await createUser()
-            if (res.status === 200) {
-                navigation.navigate("VerifyPhone", { phoneNumber })
-            } else if (res.status === 400) {
-                setError({
-                    errorValue: true,
-                    message: "Invalid Email or Phone Number"
-                })
-            }
-
+            console.log(signUp)
+            // navigation.navigate("VerifyPhone")
         }
     }
 
-    async function createUser() {
-        const body = {
-            'email': email,
-            'phoneNumber': phoneNumber,
-            'password': password
-        }
-        const data = JSON.stringify(body)
-        try {
-            const response = await AuthApi.Register(data);
-            return response;
-        } catch (error) {
-            return error;
-        }
+    const signUp = () => {
+        data.append('email', email);
+        data.append('phone_number', phoneNumber);
+        data.append('password', password);
+
+        var config = {
+            method: 'post',
+            url: 'https://morning-waters-16532.herokuapp.com/api/auth/register',
+            headers: {
+                ...data.getHeaders()
+            },
+            data: data
+        };
+
+        return axios(config)
+            .then(function (response) {
+                return JSON.stringify(response.data);
+            })
+            .catch(function (error) {
+                return error;
+            });
+
     }
+
     return (
         <SafeAreaView style={{ marginVertical: 45, marginHorizontal: 30 }}>
-            {error.errorValue == true ? <Text>{error.message}</Text> : <Text>""</Text>}
             <ScrollView>
                 <Button
                     iconSource={backIcon}
@@ -72,7 +65,7 @@ const CreatePassword = ({ route, navigation }) => {
                 <View style={{ alignItems: 'center', marginVertical: 10 }}>
                     <Image style={{ width: 118, height: 84 }} source={logo} />
                 </View>
-                <Text black text30BL style={{ fontWeight: "bold" }}>Create Password</Text>
+                <Text black text30BL style={{ fontWeight: "bold" }}>Create New Password</Text>
                 <Text grey30>Create a strong password for {email}</Text>
 
                 <View style={{ marginVertical: 20 }}>
@@ -90,4 +83,4 @@ const CreatePassword = ({ route, navigation }) => {
     )
 }
 
-export default CreatePassword
+export default UpdatePassword
