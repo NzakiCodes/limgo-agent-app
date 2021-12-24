@@ -11,13 +11,11 @@ const backIcon = require("../../assets/icons/chevron-left.png");
 
 const VerifyPhone = ({ route, navigation }) => {
     const [code, setCode] = useState('');
-    const sampleCode = '1234';
     const { phoneNumber } = route.params;
 
 
     const onSubmit = async () => {
         const res = await verifyUserOTP();
-
         if (res.status === 200) {
             navigation.navigate("Home")
         }

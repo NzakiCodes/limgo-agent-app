@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, Button } from 'react-native-ui-lib';
@@ -13,23 +13,65 @@ const backIcon = require("../../assets/icons/chevron-left.png");
 
 const RecoveryCode = ({ route, navigation }) => {
     const [code, setCode] = useState('');
-    const { phoneNumber } = route.params;
+    const codeInput = useRef(null);
+    const [error, setError] = useState({
+        errorValue: false,
+        message: ""
+    })
+    const { email } = route.params;
 
-    useEffect(async () => {
-        try {
-            const res = await AuthApi.ForgotPassword();
-        } catch (error) {
-
+    const onFulfill = async () => {
+        var res = await verifyPasswordOTP();
+        if (res.status === 200) {
+            setError({
+                errorValue: false,
+                message: ""
+            })
+            navigation.navigate("UpdatePassword", { email })
         }
-    }, [])
-
-    const onFulfill = () => {
-        data.append('verification_code', code);
-        data.append('phone_number', phoneNumber);
-
+        else {
+            setError({
+                errorValue: true,
+                message: "Wrong Code"
+            })
+            codeInput.current.shake()
+        }
 
     }
 
+    async function verifyPasswordOTP() {
+        const body = {
+            'email': email,
+            'code': code
+        }
+        const data = JSON.stringify(body)
+        try {
+            const res = await AuthApi.ForgotPasswordVerify(data);
+            setError({
+                errorValue: false,
+                message: ""
+            })
+            return res;
+        } catch (error) {
+            return error;
+        }
+    }
+    async function requestPasswordOTP() {
+        const body = {
+            'email': email
+        }
+        const data = JSON.stringify(body)
+        try {
+            const res = await AuthApi.ForgotPasswordRequest(data);
+            setError({
+                errorValue: false,
+                message: ""
+            })
+            return res;
+        } catch (error) {
+            return error;
+        }
+    }
     return (
         <SafeAreaView style={{ paddingVertical: 45, paddingHorizontal: 25, backgroundColor: '#00923F', height: '100%' }}>
             <ScrollView contentContainerStyle={{ flex: 1, alignItems: 'center', }}>
@@ -45,6 +87,11 @@ const RecoveryCode = ({ route, navigation }) => {
                     <Text color="#FDFDFD" style={{ opacity: 0.7, fontSize: 14 }}  >The recovery code was sent to your email. Please enter the code:</Text>
 
                 </View>
+                {error.errorValue === true &&
+                    <View style={{ backgroundColor: "#e90000", color: "#ffffff", borderRadius: 14, marginBottom: -23 }}>
+                        {error.errorValue === true ? <Text style={{ color: "#ffffff", padding: 12, fontSize: 18 }}>{error.message} !</Text> : <Text>""</Text>}
+                    </View>
+                }
                 <View style={{ marginVertical: 66 }}>
                     <SmoothPinCodeInput
                         cellStyle={{
@@ -56,7 +103,8 @@ const RecoveryCode = ({ route, navigation }) => {
                             width: 62,
                             height: 58
                         }}
-                        animated={false}
+                        ref={codeInput}
+                        // animated={false}
                         containerStyle={{
                             width: '100%'
                         }}
@@ -69,19 +117,28 @@ const RecoveryCode = ({ route, navigation }) => {
                             borderColor: '#00EC66',
                         }}
                         restrictToNumbers={true}
-                        autoFocus={true}
+                        // autoFocus={true}
                         codeLength={4}
                         value={code}
                         onTextChange={code => setCode(code)}
-                        onFulfill={() => onFulfill()}
+                    // onFulfill={onFulfill}
                     />
+                    <View style={{ marginVertical: 20, paddingHorizontal: 10 }}>
+                        <Button
+                            label="Verify"
+                            labelStyle={{ fontSize: 18, fontWeight: 'bold', color: '#00923f' }}
+                            style={{ backgroundColor: '#ffffff', height: 58, marginVertical: 20, borderRadius: 24 }}
+                            onPress={() => onFulfill()}
+                        />
+                    </View>
                 </View>
+
                 <View style={{ alignItems: 'center', justifyContent: "center", flexDirection: 'row', position: 'absolute', bottom: 0 }}>
                     <Text style={{ color: '#FDFDFD', opacity: 0.59, fontSize: 15 }}>
                         Didn&apos;t receive it? {' '}
 
                     </Text>
-                    <Button link linkColor="#FDFDFD" onPress={() => navigation.navigate("ForgotPassword", { resend: true })} label="Resend Code" />
+                    <Button link linkColor="#FDFDFD" onPress={() => requestPasswordOTP()} label="Resend Code" />
                 </View>
             </ScrollView>
         </SafeAreaView>

@@ -4,6 +4,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, Image, Button } from 'react-native-ui-lib';
 import TextField from '../../components/atoms/TextField';
+import AuthApi from '../../api/auth';
+
 
 const logo = require("../../assets/images/logo_icon.png");
 const backIcon = require("../../assets/icons/chevron-left.png");
@@ -12,9 +14,13 @@ const backIcon = require("../../assets/icons/chevron-left.png");
 const UpdatePassword = ({ route, navigation }) => {
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
-    const { email, phoneNumber } = route.params;
+    const { email } = route.params;
+    const [error, setError] = useState({
+        errorValue: false,
+        message: ""
+    })
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         if (password === '') {
             Alert.alert('Enter Password', 'Please Enter a Password')
             return 0
@@ -22,34 +28,43 @@ const UpdatePassword = ({ route, navigation }) => {
             Alert.alert('Passwords Must match', 'Please Repeat Password same as Password')
             return 0
         }
+        else if (password < 10) {
+            Alert.alert('Passwords too short', 'Please enter up to 3 characters.')
+            return 0
+        }
         else {
-            console.log(signUp)
-            // navigation.navigate("VerifyPhone")
+            var res = await updatePassword();
+            if (res.status === 200) {
+                setError({
+                    errorValue: false,
+                    message: ""
+                })
+                navigation.navigate("SignIn")
+            }
+            else {
+                setError({
+                    errorValue: true,
+                    message: "Wrong Code"
+                })
+            }
         }
     }
-
-    const signUp = () => {
-        data.append('email', email);
-        data.append('phone_number', phoneNumber);
-        data.append('password', password);
-
-        var config = {
-            method: 'post',
-            url: 'https://morning-waters-16532.herokuapp.com/api/auth/register',
-            headers: {
-                ...data.getHeaders()
-            },
-            data: data
-        };
-
-        return axios(config)
-            .then(function (response) {
-                return JSON.stringify(response.data);
+    async function updatePassword() {
+        const body = {
+            'email': email,
+            'password': password
+        }
+        const data = JSON.stringify(body)
+        try {
+            const res = await AuthApi.UpdatePassword(data);
+            setError({
+                errorValue: false,
+                message: ""
             })
-            .catch(function (error) {
-                return error;
-            });
-
+            return res;
+        } catch (error) {
+            return error;
+        }
     }
 
     return (
