@@ -51,7 +51,7 @@ const TextField = (props) => {
                 />
                 {
                     securePassword ?
-                        <Pressable style={{ top: 24, right: 10, position: 'absolute' }} onPress={changeVisibility}>
+                        <Pressable style={{ top: 24, right: 16, position: 'absolute', }} onPress={changeVisibility}>
                             {
                                 securePasswordState === true ? <Image style={{ width: 25, height: 19 }} source={passwordHidden} /> : <Image style={{ width: 23, height: 16, marginTop:3,marginRight:2.5 }} source={passwordvisible} />
                             }
