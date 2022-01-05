@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Alert,ActivityIndicator  } from 'react-native'
+import { Alert, ActivityIndicator } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, Image, Button } from 'react-native-ui-lib';
@@ -8,7 +8,7 @@ import AuthApi from '../../api/auth';
 
 
 const logo = require("../../assets/images/logo_icon.png");
-const loadingGif = require("../../assets/images/loading.gif");
+const loadingGif = require("../../assets/images/Pulse-1.3s-58px.gif");
 
 
 
@@ -35,10 +35,11 @@ const SignIn = ({ navigation }) => {
                 setError({
                     errorValue: false,
                     message: ""
-                })
-                setLoading(false)
-
-                navigation.navigate("Home")
+                });
+                navigation.navigate("Home");
+                setTimeout(() => {
+                    setLoading(false)
+                }, 600);
             }
             else {
                 setError({
@@ -50,7 +51,7 @@ const SignIn = ({ navigation }) => {
 
         }
     }
-   
+
     async function getUser() {
         const body = {
             'email': email,
@@ -88,15 +89,15 @@ const SignIn = ({ navigation }) => {
                     <TextField error={error.errorValue} textBold title={"Password"} securePassword={true} onChangeText={(text) => setPassword(text)} />
                     <Button onPress={() => navigation.navigate("ForgotPassword")} link linkColor="#00923F" style={{ color: '#00923F', alignSelf: 'flex-end' }} label="Forgot Passwords?" />
                     <Button
-                        label={!loading ? "Login" : "Logging In"}
+                        label={!loading ? "Login" : " "}
                         labelStyle={{ fontSize: 18, fontWeight: 'bold' }}
                         style={{ height: 58, marginVertical: 20, borderRadius: 24 }}
                         onPress={() => onSubmit()}
                         disabled={loading}
                         backgroundColor="#00923f"
                         disabledBackgroundColor="#a1a1a1"
-                        iconSource={loading?loadingGif:""}
-                        iconStyle={{ width: 20, height: 20 }}
+                        iconSource={loading ? loadingGif : ""}
+                        iconStyle={{ width: 50, height: 30 }}
                     />
 
                 </View>
