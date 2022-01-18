@@ -60,7 +60,7 @@ const CreatePassword = ({ route, navigation }) => {
     }
     return (
         <SafeAreaView style={{ marginVertical: 45, marginHorizontal: 30 }}>
-            {error.errorValue == true ? <Text>{error.message}</Text> : <Text>""</Text>}
+            {error.errorValue == true ? <Text>{error.message}</Text> : <Text></Text>}
             <ScrollView>
                 <Button
                     iconSource={backIcon}

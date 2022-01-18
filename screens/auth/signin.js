@@ -1,10 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useContext } from 'react'
 import { Alert, ActivityIndicator } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, Image, Button } from 'react-native-ui-lib';
 import TextField from '../../components/atoms/TextField';
 import AuthApi from '../../api/auth';
+import { AuthContext } from '../../context/AuthContext';
 
 
 const logo = require("../../assets/images/logo_icon.png");
@@ -20,6 +21,9 @@ const SignIn = ({ navigation }) => {
         message: ""
     });
     const [loading, setLoading] = useState(false);
+    const { signIn } = useContext(AuthContext)
+
+
     const onSubmit = async () => {
         if (email === '') {
             Alert.alert('Enter Email', 'Please Enter an Email')
@@ -36,7 +40,9 @@ const SignIn = ({ navigation }) => {
                     errorValue: false,
                     message: ""
                 });
-                navigation.navigate("Home");
+                // navigation.navigate("Home");
+                signIn(res.data)
+                // console.log(res.data)
                 setTimeout(() => {
                     setLoading(false)
                 }, 600);

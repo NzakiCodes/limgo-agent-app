@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react';
+import * as SecureStore from 'expo-secure-store';
 import { StyleSheet, Image, Animated, Dimensions, Pressable } from 'react-native';
 import { View, Text, TouchableOpacity } from 'react-native-ui-lib';
 import Avatar from '../molecules/Avatar';
@@ -14,7 +15,8 @@ const supportIcon = require('../../assets/icons/user.png');
 const chevronForwardLightIcon = require('../../assets/icons/icons-chevron-light.png');
 const logoutIcon = require('../../assets/icons/logout.png');
 
-const Menu = ({ isNavOpen, onClose }) => {
+
+const Menu = ({ isNavOpen, onClose, userData }) => {
     const slideAnim = useRef(new Animated.Value(-300)).current;
     const animationDuration = 300;
     const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -93,53 +95,54 @@ const Menu = ({ isNavOpen, onClose }) => {
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.user}>
-                                <Avatar edit={true} onEdit={() => console.log('Hello')} />
-                                <Pressable onPress={()=>navigation.navigate("Profile")}>
+                                <Avatar edit={true} onEdit={() => console.log('Edit Avaatr')} />
+                                <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
                                     <View style={styles.userDetails}>
-                                        <Text style={styles.userName}>Mark U.</Text>
-                                        <Text style={styles.userPhoneNumber}>0816 548 5271</Text>
+                                        <Text style={styles.userName}>{userData ? userData.firstName : 'Loading...'}</Text>
+                                        <Text style={styles.userPhoneNumber}>{userData ? userData.phoneNumber : 'Loading...'}</Text>
+                                        <Text style={styles.editProfile}>Edit Profile</Text>
                                     </View>
-                                </Pressable>
+                                </TouchableOpacity>
                             </View>
                         </View>
                         <View style={styles.menuNavigation}>
                             <View style={styles.menuNavList}>
-                                <TouchableOpacity style={styles.menuNavListItem}  onPress={()=>navigation.navigate("History")}>
+                                <TouchableOpacity style={styles.menuNavListItem} onPress={() => navigation.navigate("History")}>
                                     <View style={styles.menuNavListItemGroup}>
                                         <Image source={historyIcon} style={styles.menuNavListItemIcon} />
                                         <Text style={styles.menuNavListItemText}>History</Text>
                                     </View>
                                     <Image source={chevronForwardLightIcon} style={styles.chevronForwardLightIcon} />
                                 </TouchableOpacity>
-                                <TouchableOpacity style={styles.menuNavListItem}  onPress={()=>navigation.navigate("Notification")}>
+                                <TouchableOpacity style={styles.menuNavListItem} onPress={() => navigation.navigate("Notification")}>
                                     <View style={styles.menuNavListItemGroup}>
                                         <Image source={notificationsIcon} style={styles.menuNavListItemIcon} />
                                         <Text style={styles.menuNavListItemText}>Notification</Text>
                                     </View>
                                     <Image source={chevronForwardLightIcon} style={styles.chevronForwardLightIcon} />
                                 </TouchableOpacity>
-                                <TouchableOpacity style={styles.menuNavListItem}  onPress={()=>navigation.navigate("ChatWithUs")}>
+                                <TouchableOpacity style={styles.menuNavListItem} onPress={() => navigation.navigate("ChatWithUs")}>
                                     <View style={styles.menuNavListItemGroup}>
                                         <Image source={chatIcon} style={styles.menuNavListItemIcon} />
                                         <Text style={styles.menuNavListItemText}>Chat with us</Text>
                                     </View>
                                     <Image source={chevronForwardLightIcon} style={styles.chevronForwardLightIcon} />
                                 </TouchableOpacity>
-                                <TouchableOpacity style={styles.menuNavListItem}  onPress={()=>navigation.navigate("Settings")}>
+                                <TouchableOpacity style={styles.menuNavListItem} onPress={() => navigation.navigate("Settings")}>
                                     <View style={styles.menuNavListItemGroup}>
                                         <Image source={settingsIcon} style={styles.menuNavListItemIcon} />
                                         <Text style={styles.menuNavListItemText}>Settings</Text>
                                     </View>
                                     <Image source={chevronForwardLightIcon} style={styles.chevronForwardLightIcon} />
                                 </TouchableOpacity>
-                                <TouchableOpacity style={styles.menuNavListItem}  onPress={()=>navigation.navigate("Tutorials")}>
+                                <TouchableOpacity style={styles.menuNavListItem} onPress={() => navigation.navigate("Tutorials")}>
                                     <View style={styles.menuNavListItemGroup}>
                                         <Image source={tutorialsIcon} style={styles.menuNavListItemIcon} />
                                         <Text style={styles.menuNavListItemText}>Tutorials</Text>
                                     </View>
                                     <Image source={chevronForwardLightIcon} style={styles.chevronForwardLightIcon} />
                                 </TouchableOpacity>
-                                <TouchableOpacity style={styles.menuNavListItem}  onPress={()=>navigation.navigate("Support")}>
+                                <TouchableOpacity style={styles.menuNavListItem} onPress={() => navigation.navigate("Support")}>
                                     <View style={styles.menuNavListItemGroup}>
                                         <Image source={supportIcon} style={styles.menuNavListItemIcon} />
                                         <Text style={styles.menuNavListItemText}>Support</Text>
@@ -214,6 +217,11 @@ const styles = StyleSheet.create({
         color: '#333333',
         fontSize: 14,
         lineHeight: 32,
+    },
+    editProfile: {
+        color: 'red',
+        fontSize: 12,
+        lineHeight: 30,
     },
     cancelIconContainer: {
         flex: 1,

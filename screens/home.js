@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Text, View, TouchableOpacity, Image, Switch } from 'react-native-ui-lib';
 import { Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import RidersMap from '../components/organisms/Maps/RidersMap';
 import Menu from '../components/organisms/Menu';
+import ProfileApi from '../api/profile';
+import { AuthContext } from '../context/AuthContext';
+
 
 const menuButton = require('../assets/images/menu.png')
 const filterButton = require('../assets/images/filter.png')
@@ -11,80 +14,113 @@ const filterButton = require('../assets/images/filter.png')
 
 export default function HomeScreen() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const contextt = useContext(AuthContext);
 
+  useEffect(() => {
+    const cleanUp = async () => {
+      // const token = await SecureStore.getItemAsync('userToken');
+
+      try {
+        const res = await ProfileApi.ViewProfile();
+        setUserData(res.data);
+        // console.log("Res:",res.data);
+
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    cleanUp();
+    const userDetailsFetch = async () => {
+      try {
+        const res = await contextt.fetchUser()
+        const userD = contextt.getUserDetails()
+        console.log(res);
+      } catch (error) {
+
+      }
+    }
+    userDetailsFetch()
+
+  }, [])
   const coordinates = {
     latitude: 5.034611,
     longitude: 7.928292
-  }
+  };
+
   const [dutyState, setDutyState] = useState(false);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.mapContainer}>
-        {
-          isMenuOpen &&
-          <View style={styles.menu}>
-            <Menu
-              onClose={() => setIsMenuOpen(!isMenuOpen)}
-              isNavOpen={isMenuOpen}
-            />
+    <View>
+      {
+        isMenuOpen &&
+        <View style={styles.menu}>
+          <Menu
+            onClose={() => setIsMenuOpen(!isMenuOpen)}
+            isNavOpen={isMenuOpen}
+            userData={userData}
+          />
+        </View>
+      }
+      <SafeAreaView style={styles.container}>
+        <View style={styles.mapContainer}>
+
+          <View style={styles.navigationBar}>
+            <View style={styles.navContainer}>
+              <View>
+                <TouchableOpacity style={styles.navMenuButton} onPress={() => setIsMenuOpen(true)}>
+                  <Image source={menuButton} style={styles.navMenuButton} />
+                </TouchableOpacity>
+              </View>
+              <View>
+                <TouchableOpacity style={styles.dateButton}>
+                  <Text style={styles.heading}>February, 19</Text>
+                </TouchableOpacity>
+              </View>
+              <View>
+                <TouchableOpacity style={styles.navMenuButton}>
+                  <Image source={filterButton} style={styles.filterButton} />
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
-        }
-        <View style={styles.navigationBar}>
-          <View style={styles.navContainer}>
-            <View>
-              <TouchableOpacity style={styles.navMenuButton} onPress={() => setIsMenuOpen(true)}>
-                <Image source={menuButton} style={styles.navMenuButton} />
-              </TouchableOpacity>
+          <View style={styles.slideOutBottomContainer}>
+            <View style={styles.slideOutBottom}>
+              <View>
+                <Text style={styles.greetingText}>
+                  Hello {userData && userData.firstName || ''},
+                </Text>
+                <Text style={styles.welcomeText}>Welcome Back to Limgo Logistics</Text>
+              </View>
+              <View>
+
+              </View>
             </View>
-            <View>
-              <TouchableOpacity style={styles.dateButton}>
-                <Text style={styles.heading}>February, 19</Text>
-              </TouchableOpacity>
+
+            <View style={[styles.switchContainer, { backgroundColor: dutyState ? '#00923F' : '#475675', }]}>
+              <View>
+                <Text style={[styles.switchText, { opacity: dutyState ? 0.7 : 0.5 }]}>{dutyState ? 'on' : 'Off'} Duty</Text>
+              </View>
+              <View style={styles.switchButton}>
+                <Switch
+                  onColor={'#66be8c'}
+                  offColor={'#a1a1a1'}
+                  // style={{backgroundColor:'#00923F7D'}}
+                  value={dutyState}
+                  onValueChange={() => setDutyState(!dutyState)}
+                  style={{ marginBottom: 20 }}
+                />
+              </View>
             </View>
-            <View>
-              <TouchableOpacity style={styles.navMenuButton}>
-                <Image source={filterButton} style={styles.filterButton} />
-              </TouchableOpacity>
-            </View>
+          </View>
+          <View>
+            <RidersMap coordinates={coordinates} title={"Rider"} />
           </View>
         </View>
-        <View style={styles.slideOutBottomContainer}>
-          <View style={styles.slideOutBottom}>
-            <View>
-              <Text style={styles.greetingText}>
-                Hello Mark,
-              </Text>
-              <Text style={styles.welcomeText}>Welcome Back to Limgo Logistics</Text>
-            </View>
-            <View>
 
-            </View>
-          </View>
-
-          <View style={[styles.switchContainer, { backgroundColor: dutyState ? '#00923F' : '#475675', }]}>
-            <View>
-              <Text style={[styles.switchText, { opacity: dutyState ? 0.7 : 0.5 }]}>{dutyState ? 'on' : 'Off'} Duty</Text>
-            </View>
-            <View style={styles.switchButton}>
-              <Switch
-                onColor={'#66be8c'}
-                offColor={'#a1a1a1'}
-                // style={{backgroundColor:'#00923F7D'}}
-                value={dutyState}
-                onValueChange={() => setDutyState(!dutyState)}
-                style={{ marginBottom: 20 }}
-              />
-            </View>
-          </View>
-        </View>
-        <View>
-          <RidersMap coordinates={coordinates} title={"Rider"} />
-        </View>
-      </View>
-
-    </SafeAreaView>
-  )
+      </SafeAreaView>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
