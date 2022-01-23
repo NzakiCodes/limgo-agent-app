@@ -8,16 +8,24 @@ const base = "user";
 export default class ProfileApi {
 
   static ViewProfile = async () => {
-    const token = await SecureStore.getItemAsync("userToken");
+   /*  const token = await SecureStore.getItemAsync("userToken");
     var config = {
       method: 'get',
       url: 'https://limgo-server.herokuapp.com/api/user/profile',
       headers: {
         'x-access-token': token
       }
-    };
-    const res = await axios(config);
-    return res;
+    }; */
+  /*  try {
+    // const res = await axios(config);
+    if (res.statusCode !== 200) {
+      console.log(res);
+      SecureStore.deleteItemAsync("userToken");
+    }
+    // return res;
+   } catch (error) {
+      console.log("Error Code" +error.errorCode)
+   } */
   };
   static EditProfile = async (data) => {
     const token = await SecureStore.getItemAsync("userToken");

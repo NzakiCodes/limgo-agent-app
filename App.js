@@ -105,15 +105,15 @@ export default function App() {
         dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
       },
       fetchUser: async () => {
-        try {
-          const res = await ProfileApi.ViewProfile();
-          const userDetails = await res.data;
+        /*   try {
+            const res = await ProfileApi.ViewProfile();
+            const userDetails = await res.data;
 
-          dispatch({ type: 'FETCH_USER', payload: userDetails });
-          return res.data
-        } catch (error) {
-          console.log(error);
-        }
+            dispatch({ type: 'FETCH_USER', payload: userDetails });
+            return res.data
+          } catch (error) {
+            // console.log("eRRR"+error);
+          } */
       },
       getUserDetails: () => {
         return state.userDetails;

@@ -28,7 +28,7 @@ const Settings = () => {
                             style={styles.picker}
                             onValueChange={setVehicleType}
                             prompt="Choose Vehicle Type"
-                            mode="dropdown"
+                            // mode="SINGLE"
                             accessibilityHint="Choose Vehicle Type"
                             placeholder="Choose Vehicle Type"
                             itemStyle={{ width: 300 }}

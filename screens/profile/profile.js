@@ -21,7 +21,7 @@ const Profile = () => {
     const [loading, setLoading] = React.useState(false);
 
     React.useEffect(() => {
-        const fetchUser = async () => {
+       /*  const fetchUser = async () => {
             try {
                 const userInfo = await ProfileApi.ViewProfile();
                 setUserdata(userInfo.data);
@@ -31,7 +31,7 @@ const Profile = () => {
                 setError(error);
             }
         }
-        fetchUser();
+        fetchUser(); */
     }, [])
 
     const editProfile = async () => {
@@ -41,14 +41,14 @@ const Profile = () => {
         });
 
         setLoading(true)
-        try {
+       /*  try {
             const res = await ProfileApi.EditProfile(data);
             setUserdata(res.data);
             console.log(res.data);
             setLoading(false)   
         } catch (error) {
             setError(error);
-        }
+        } */
 
         // var data = JSON.stringify({
         //     "firstName": userData.firstName,

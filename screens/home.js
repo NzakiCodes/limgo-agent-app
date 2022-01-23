@@ -18,7 +18,7 @@ export default function HomeScreen() {
   const contextt = useContext(AuthContext);
 
   useEffect(() => {
-    const cleanUp = async () => {
+    /* const cleanUp = async () => {
       // const token = await SecureStore.getItemAsync('userToken');
 
       try {
@@ -30,8 +30,8 @@ export default function HomeScreen() {
         console.log(error);
       }
     }
-    cleanUp();
-    const userDetailsFetch = async () => {
+    cleanUp(); */
+   /*  const userDetailsFetch = async () => {
       try {
         const res = await contextt.fetchUser()
         const userD = contextt.getUserDetails()
@@ -39,8 +39,8 @@ export default function HomeScreen() {
       } catch (error) {
 
       }
-    }
-    userDetailsFetch()
+    } */
+    // userDetailsFetch()
 
   }, [])
   const coordinates = {
