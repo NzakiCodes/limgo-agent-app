@@ -26,8 +26,10 @@ import Profile from './screens/profile/profile';
 import ChangePassword from './screens/profile/changePasword';
 
 import { AuthContext } from './context/AuthContext';
+import { Provider } from 'react-redux';
 import { OnboardingContext, OnboardingProvider } from './context/OnboardingContext';
 import ProfileApi from './api/profile';
+import store from './stores/store';
 const Stack = createNativeStackNavigator();
 
 // export default function App() {
@@ -123,36 +125,38 @@ export default function App() {
   );
 
   return (
-    <AuthContext.Provider value={authContext}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          {state.userToken == null ? (
-            <>
-              {/* <Stack.Screen name='OnBoarding' options={{ headerShown: false }} component={OnBoarding} /> */}
-              <Stack.Screen name='SignIn' options={{ headerShown: false, animationTypeForReplace: state.isSignout ? 'pop' : 'push', }} component={SignIn} />
-              <Stack.Screen name='SignUp' options={{ headerShown: false }} component={SignUp} />
-              <Stack.Screen name='CreatePassword' options={{ headerShown: false }} component={CreatePassword} />
-              <Stack.Screen name='VerifyPhone' options={{ headerShown: false }} component={VerifyPhone} />
-              <Stack.Screen name='ForgotPassword' options={{ headerShown: false }} component={ForgotPassword} />
-              <Stack.Screen name='RecoveryCode' options={{ headerShown: false }} component={RecoveryCode} />
-              <Stack.Screen name='UpdatePassword' options={{ headerShown: false }} component={UpdatePassword} />
-            </>
-          ) : (
-            <>
-              <Stack.Screen name='Home' options={{ title: 'Limgo Agent', headerShown: false }} component={HomeScreen} />
-              <Stack.Screen name='Profile' options={{ headerShown: false }} component={Profile} />
-              <Stack.Screen name='ChangePassword' options={{ headerShown: false }} component={ChangePassword} />
-              <Stack.Screen name='History' options={{ headerShown: true }} component={History} />
-              <Stack.Screen name='Notification' options={{ headerShown: true }} component={Notification} />
-              <Stack.Screen name='ChatWithUs' options={{ headerShown: true }} component={ChatWithUs} />
-              <Stack.Screen name='Settings' options={{ headerShown: false }} component={Settings} />
-              <Stack.Screen name='Tutorials' options={{ headerShown: true }} component={Tutorials} />
-              <Stack.Screen name='Support' options={{ headerShown: true }} component={Support} />
-            </>
-          )}
-        </Stack.Navigator>
-      </NavigationContainer>
-    </AuthContext.Provider>
+    <Provider store={store}>
+      <AuthContext.Provider value={authContext}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            {state.userToken == null ? (
+              <>
+                {/* <Stack.Screen name='OnBoarding' options={{ headerShown: false }} component={OnBoarding} /> */}
+                <Stack.Screen name='SignIn' options={{ headerShown: false, animationTypeForReplace: state.isSignout ? 'pop' : 'push', }} component={SignIn} />
+                <Stack.Screen name='SignUp' options={{ headerShown: false }} component={SignUp} />
+                <Stack.Screen name='CreatePassword' options={{ headerShown: false }} component={CreatePassword} />
+                <Stack.Screen name='VerifyPhone' options={{ headerShown: false }} component={VerifyPhone} />
+                <Stack.Screen name='ForgotPassword' options={{ headerShown: false }} component={ForgotPassword} />
+                <Stack.Screen name='RecoveryCode' options={{ headerShown: false }} component={RecoveryCode} />
+                <Stack.Screen name='UpdatePassword' options={{ headerShown: false }} component={UpdatePassword} />
+              </>
+            ) : (
+              <>
+                <Stack.Screen name='Home' options={{ title: 'Limgo Agent', headerShown: false }} component={HomeScreen} />
+                <Stack.Screen name='Profile' options={{ headerShown: false }} component={Profile} />
+                <Stack.Screen name='ChangePassword' options={{ headerShown: false }} component={ChangePassword} />
+                <Stack.Screen name='History' options={{ headerShown: true }} component={History} />
+                <Stack.Screen name='Notification' options={{ headerShown: true }} component={Notification} />
+                <Stack.Screen name='ChatWithUs' options={{ headerShown: true }} component={ChatWithUs} />
+                <Stack.Screen name='Settings' options={{ headerShown: false }} component={Settings} />
+                <Stack.Screen name='Tutorials' options={{ headerShown: true }} component={Tutorials} />
+                <Stack.Screen name='Support' options={{ headerShown: true }} component={Support} />
+              </>
+            )}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </AuthContext.Provider>
+    </Provider>
   );
 }
 
