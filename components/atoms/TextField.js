@@ -8,12 +8,13 @@ const lockedKey = require("../../assets/icons/padlock-lock-svgrepo-com.png");
 
 
 const TextField = (props) => {
-    const { title, textBold, securePassword, placeholder, textStyle, placeholderTextColor, inputStyle, value, onChangeText, error, locked } = props;
+    const { title, textBold, securePassword, placeholder,noBorder, textStyle, placeholderTextColor, inputStyle, value, onChangeText, error, locked, controlBoder: controlBorder } = props;
     const [securePasswordState, setSecurePassword] = useState(securePassword ? securePassword : false);
 
     // useEffect(() => {
     //     setSecurePassword(securePassword ? securePassword : false);
     // })
+    const [borderWidth,setBorderWidth] = useState(controlBorder?0:1)
 
     const changeVisibility = () => {
         setSecurePassword(!securePasswordState)
@@ -35,7 +36,7 @@ const TextField = (props) => {
                     placeholder={placeholder ? placeholder : title}
                     style={{
                         height: 58,
-                        borderWidth: 1,
+                        borderWidth: borderWidth,
                         paddingHorizontal: 20,
                         paddingTop: 10,
                         paddingBottom: 5,
@@ -51,6 +52,8 @@ const TextField = (props) => {
                     pointerEvents={locked ? 'none' : 'auto'}
                     placeholderTextColor={placeholderTextColor}
                     value={value}
+                    onFocus={()=>setBorderWidth(1)}
+                    onBlur={()=>setBorderWidth(controlBorder?0:1)}
                 />
                 {
                     securePassword ?

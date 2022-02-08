@@ -3,7 +3,9 @@ import * as SecureStore from 'expo-secure-store';
 import { StyleSheet, Image, Animated, Dimensions, Pressable } from 'react-native';
 import { View, Text, TouchableOpacity } from 'react-native-ui-lib';
 import Avatar from '../molecules/Avatar';
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+
 
 const cancelIcon = require('../../assets/icons/cancel.png');
 const historyIcon = require('../../assets/icons/history.png');
@@ -21,6 +23,8 @@ const Menu = ({ isNavOpen, onClose, userData }) => {
     const animationDuration = 300;
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const navigation = useNavigation();
+    const { user } = useSelector((state) => state.auth)
+    // console.log(user.token);
 
 
     const slideInLeftAnimation = () => {
@@ -98,8 +102,8 @@ const Menu = ({ isNavOpen, onClose, userData }) => {
                                 <Avatar edit={true} onEdit={() => console.log('Edit Avaatr')} />
                                 <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
                                     <View style={styles.userDetails}>
-                                        <Text style={styles.userName}>{userData ? userData.firstName : 'Loading...'}</Text>
-                                        <Text style={styles.userPhoneNumber}>{userData ? userData.phoneNumber : 'Loading...'}</Text>
+                                        <Text style={styles.userName}>{user && (user.first_name == null && user.user.email)}</Text>
+                                        <Text style={styles.userPhoneNumber}>{user && (user.first_name == null && user.user.phone_number)}</Text>
                                         <Text style={styles.editProfile}>Edit Profile</Text>
                                     </View>
                                 </TouchableOpacity>
@@ -114,7 +118,7 @@ const Menu = ({ isNavOpen, onClose, userData }) => {
                                     </View>
                                     <Image source={chevronForwardLightIcon} style={styles.chevronForwardLightIcon} />
                                 </TouchableOpacity>
-                                <TouchableOpacity style={styles.menuNavListItem} onPress={() => navigation.navigate("Notification")}>
+                                <TouchableOpacity style={styles.menuNavListItem} onPress={() => navigation.navigate("Notifications")}>
                                     <View style={styles.menuNavListItemGroup}>
                                         <Image source={notificationsIcon} style={styles.menuNavListItemIcon} />
                                         <Text style={styles.menuNavListItemText}>Notification</Text>

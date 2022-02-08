@@ -5,26 +5,25 @@ import { View, Text, Button } from 'react-native-ui-lib';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 import { Alert } from 'react-native';
 import AuthApi from '../../api/auth';
+import userService from '../../services/user.service';
 
 
 const backIcon = require("../../assets/icons/chevron-left.png");
 
 const VerifyPhone = ({ route, navigation }) => {
     const [code, setCode] = useState('');
-    const { phoneNumber } = route.params;
 
 
     const onSubmit = async () => {
         const res = await verifyUserOTP();
-        if (res.status === 200) {
+        if (res.data.status === "success") {
             navigation.navigate("Home")
         }
     }
 
     async function verifyUserOTP() {
-        const data = JSON.stringify({ "code": code, "phoneNumber": phoneNumber })
         try {
-            const res = await AuthApi.VerifyOTP(data);
+            const res = userService.verifyPhone(code);
             return res
         } catch (error) {
             console.error(error);

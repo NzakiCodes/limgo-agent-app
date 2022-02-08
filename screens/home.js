@@ -6,16 +6,30 @@ import RidersMap from '../components/organisms/Maps/RidersMap';
 import Menu from '../components/organisms/Menu';
 import ProfileApi from '../api/profile';
 import { AuthContext } from '../context/AuthContext';
+import FilterTask from '../components/organisms/task';
+import Task from '../components/templates/Task';
+
+import { useDispatch, useSelector } from 'react-redux';
+
 
 
 const menuButton = require('../assets/images/menu.png')
 const filterButton = require('../assets/images/filter.png')
+const expanButton = require('../assets/images/icons-dots.png')
 
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isFilterTaskOpen, setIsFilterTaskOpen] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [isTaskList, setTaskList] = useState(false);
+
+
+  const { user } = useSelector((state) => state.auth)
+  // console.log(user.token);
+
   const contextt = useContext(AuthContext);
+
 
   useEffect(() => {
     const cleanUp = async () => {
@@ -62,6 +76,24 @@ export default function HomeScreen() {
           />
         </View>
       }
+      {
+        isFilterTaskOpen &&
+        <View style={styles.menu}>
+          <FilterTask
+            onClose={() => setIsFilterTaskOpen(!isFilterTaskOpen)}
+            isNavOpen={isMenuOpen}
+          />
+        </View>
+      }
+      {
+        isTaskList &&
+        <View style={[styles.menu]}>
+          <Task closeTask={() => setTaskList(false)} />
+
+        </View>
+      }{
+        // console.log(isTaskList)
+      }
       <SafeAreaView style={styles.container}>
         <View style={styles.mapContainer}>
 
@@ -73,12 +105,12 @@ export default function HomeScreen() {
                 </TouchableOpacity>
               </View>
               <View>
-                <TouchableOpacity style={styles.dateButton}>
+                <TouchableOpacity style={styles.dateButton} onPress={() => navigation.navigate("CalendarScreen")}>
                   <Text style={styles.heading}>February, 19</Text>
                 </TouchableOpacity>
               </View>
               <View>
-                <TouchableOpacity style={styles.navMenuButton}>
+                <TouchableOpacity style={styles.navMenuButton} onPress={() => setIsFilterTaskOpen(!isFilterTaskOpen)} >
                   <Image source={filterButton} style={styles.filterButton} />
                 </TouchableOpacity>
               </View>
@@ -88,7 +120,7 @@ export default function HomeScreen() {
             <View style={styles.slideOutBottom}>
               <View>
                 <Text style={styles.greetingText}>
-                  Hello {userData && userData.firstName || ''},
+                  Hello {user && (user.first_name == null && user.user.email)},
                 </Text>
                 <Text style={styles.welcomeText}>Welcome Back to Limgo Logistics</Text>
               </View>
@@ -113,7 +145,10 @@ export default function HomeScreen() {
               </View>
             </View>
           </View>
-          <View>
+          <View style={{ position: 'relative' }}>
+            <View>
+              <TaskButton onPress={() => setTaskList(true)} />
+            </View>
             <RidersMap coordinates={coordinates} title={"Rider"} />
           </View>
         </View>
@@ -122,7 +157,65 @@ export default function HomeScreen() {
     </View>
   );
 }
+const TaskButton = (props) => {
+  const { taskCount = 199 } = props;
+  const taskCountCheck = taskCount > 100 ? '99+' : taskCount
+  return (
+    <View style={taskButtonStyle.container}>
+      <View style={taskButtonStyle.content}>
+        <Text style={taskButtonStyle.buttonText}>View Task(s)</Text>
+        <TouchableOpacity {...props} style={taskButtonStyle.button}>
+          <View style={taskButtonStyle.badge}>
+            <Text style={taskButtonStyle.badgeText}>{taskCountCheck}</Text>
+          </View>
+          <Image style={{ width: 24, height: 24 }} source={expanButton} />
+        </TouchableOpacity>
+      </View>
+    </View>
+  )
+}
 
+const taskButtonStyle = StyleSheet.create({
+  container: {
+    backgroundColor: '#00923F',
+    width: '90%',
+    height: 62,
+    position: 'absolute',
+    top: 69,
+    left: '5%',
+    zIndex: 10,
+    borderRadius: 8,
+  },
+  content: {
+    flexDirection: 'row',
+    paddingVertical: 18,
+    paddingHorizontal: 16,
+    justifyContent: 'space-between'
+  },
+  buttonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    lineHeight: 29
+  },
+  button: {
+    flexDirection: 'row'
+  },
+  badge: {
+    backgroundColor: '#E90000',
+    height: 20,
+    width: 20,
+    borderRadius: 9999,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  badgeText: {
+    lineHeight: 12,
+    color: '#ffffff',
+    fontSize: 11,
+    margin: 'auto'
+  }
+})
 const styles = StyleSheet.create({
   container: {
     width: '100%',
@@ -230,5 +323,11 @@ const styles = StyleSheet.create({
     left: 0,
     width: '100%',
     height: '100%'
+  },
+  taskList: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    zIndex: 100
   }
 })
