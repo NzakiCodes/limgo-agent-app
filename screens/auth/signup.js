@@ -48,7 +48,7 @@ const SignUp = ({ navigation }) => {
             })
             return null;
         } else {
-            navigation.navigate("CreatePassword", {
+            navigation.navigate("Register", {
                 email,
                 phoneNumber
             })

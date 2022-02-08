@@ -43,9 +43,13 @@ const Login = () => {
         .unwrap()
         .then(()=>{
             navigation.navigate("Home")
+            console.log("Login Successful");
+            
         })
-        .catch(()=>{
+        .catch((e)=>{
             setLoading(false)
+            console.log("error:",e);
+
         })
         
     }

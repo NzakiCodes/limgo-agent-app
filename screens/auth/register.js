@@ -90,11 +90,15 @@ const Register = ({ route, navigation }) => {
 
         dispatch(register({email, phone_number, password}))
         .unwrap()
-        .then(()=>{
-            navigation.navigate("VerifyPhone")
+        .then((message)=>{
+            navigation.navigate("VerifyPhone");
+            console.log("SignUp Success: "+message);
+
         })
-        .catch(()=>{
+        .catch((message)=>{
             setLoading(false)
+            console.log(message);
+
         })
 
     }

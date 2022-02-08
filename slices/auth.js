@@ -3,7 +3,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { setMessage } from "./authMessage";
 import AuthService from "../services/auth.service";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as SecureStore from "expo-secure-store";
 
 const userAsync = AsyncStorage.getItem("user");
 const user = userAsync != null ? userAsync : null;
@@ -12,9 +11,11 @@ export const register = createAsyncThunk(
     "auth/register",
     async ({ email, phone_number, password }, thunkAPI) => {
         try {
-            const response = await AuthService.register(email, phone_number, password);
-            thunkAPI.dispatch(setMessage(response.data.status));
-            return { user: res.data.user }
+            const res = await AuthService.register(email, phone_number, password);
+            // thunkAPI.dispatch(setMessage(res.data.status));
+            console.log(res)    
+            // console.log("Slice: "+res);
+            return { user: res.data }
         } catch (error) {
             const message =
                 (
@@ -22,6 +23,7 @@ export const register = createAsyncThunk(
                     error.response.data &&
                     error.response.data.status
                 ) || error.message || error.toString();
+                
             thunkAPI.dispatch(setMessage(message));
             return thunkAPI.rejectWithValue();
         }
@@ -44,24 +46,7 @@ export const login = createAsyncThunk(
                     error.response.data &&
                     error.response.data.status
                 ) || error.message || error.toString();
-            thunkAPI.dispatch(setMessage(message));
-            return thunkAPI.rejectWithValue();
-        }
-    }
-);
-export const getUserInfo = createAsyncThunk(
-    "auth/getUserInfo",
-    async ({}, thunkAPI) => {
-        try {
-            const res = await userService.getAuthUser();
-            return { user: res.data }
-        } catch (error) {
-            const message =
-                (
-                    error.response &&
-                    error.response.data &&
-                    error.response.data.status
-                ) || error.message || error.toString();
+                console.log(message);
             thunkAPI.dispatch(setMessage(message));
             return thunkAPI.rejectWithValue();
         }
@@ -72,12 +57,7 @@ export const logout = createAsyncThunk("auth/logout", async () => {
     await AuthService.logout();
 })
 
-// const initialState = user ? { isLoggedIn: true, user } : { isLoggedIn: false, user: null };
-const initialState = {
-    isLoggedIn: SecureStore.getItemAsync("token") !== null ? true : false,
-    user: {},
-};
-
+const initialState = user ? { isLoggedIn: true, user } : { isLoggedIn: false, user: null };
 console.log(user)
 const authSlice = createSlice({
     name: "auth",
@@ -112,20 +92,7 @@ const authSlice = createSlice({
         [logout.fulfilled]: (state, action) => {
             state.isLoggedIn = false;
             state.user = null;
-        },
-        [getUserInfo.fulfilled]: (state, action) => {
-            state.isLoggedIn = true;
-            state.user = action.payload.user;
-        },
-        [getUserInfo.pending]: (state, action) => {
-            state.isLoggedIn = false;
-            state.user = null;
-        },
-        [getUserInfo.rejected]: (state, action) => {
-            state.isLoggedIn = false;
-            state.user = null;
         }
-        
     }
 });
 

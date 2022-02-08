@@ -67,25 +67,31 @@ const NavigationMainContainer = () => {
   const dispatch = useDispatch();
 
 
-  const { isLoggedIn, user } = useSelector((state) => state.auth);
+  // const { isLoggedIn, user } = useSelector((state) => state.auth);
 
-  React.useEffect(() => {
-    const cleanUp = () => {
-    if (isLoggedIn) {
-      setLoading(true);
+  // React.useEffect(() => {
+  //   const cleanUp = () => {
+  //   if (isLoggedIn) {
+  //     try {
+  //     setLoading(true);
 
-      dispatch(getUserInfo())
-        .unwrap()
-        .then(() => {
-        })
-        .catch(() => {
-          setLoading(false)
-        })
-      }
-    }
-      cleanUp()
+  //     dispatch(getUserInfo())
+  //       .unwrap()
+  //       .then(() => {
+  //       })
+  //       .catch(() => {
+  //         setLoading(false)
+  //       })
+  //     }
+        
+  //     } catch (error) {
+        
+  //     }
+
+  //   }
+  //     cleanUp()
     
-  }, [isLoggedIn, dispatch, user]);
+  // }, [isLoggedIn, dispatch, user]);
 
   if (loading) {
     return (
@@ -96,19 +102,19 @@ const NavigationMainContainer = () => {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator>
-          {
+          {/* {
             !isLoggedIn ? (
-              <>
+              <> */}
                 <Stack.Screen name='OnBoarding' options={{ headerShown: false }} component={OnBoarding} />
                 <Stack.Screen name='SignIn' options={{ headerShown: false }} component={Login} />
                 <Stack.Screen name='SignUp' options={{ headerShown: false }} component={SignUp} />
-                <Stack.Screen name='CreatePassword' options={{ headerShown: false }} component={Register} />
+                <Stack.Screen name='Register' options={{ headerShown: false }} component={Register} />
                 <Stack.Screen name='VerifyPhone' options={{ headerShown: false }} component={VerifyPhone} />
                 <Stack.Screen name='ForgotPassword' options={{ headerShown: false }} component={ForgotPassword} />
                 <Stack.Screen name='RecoveryCode' options={{ headerShown: false }} component={RecoveryCode} />
                 <Stack.Screen name='UpdatePassword' options={{ headerShown: false }} component={UpdatePassword} />
-              </>) :
-              (<>
+              {/* </>) :
+              (<> */}
                 <Stack.Screen name='Home' options={{ title: 'Limgo Agent', headerShown: false }} component={HomeScreen} />
                 <Stack.Screen name='Notifications' options={{ headerShown: false }} component={Notifications} />
                 <Stack.Screen name='CalendarScreen' options={{ headerShown: false }} component={CalendarScreen} />
@@ -116,12 +122,13 @@ const NavigationMainContainer = () => {
                 <Stack.Screen name='ChangePassword' options={{ headerShown: false }} component={ChangePassword} />
                 <Stack.Screen name='History' options={{ headerShown: false }} component={History} />
                 <Stack.Screen name='ChatWithUs' options={{ headerShown: true }} component={ChatWithUs} />
-                <Stack.Screen name='Settings' options={{ headerShown: true }} component={Settings} />
+                <Stack.Screen name='Settings' options={{ headerShown: false }} component={Settings} />
                 <Stack.Screen name='Tutorials' options={{ headerShown: true }} component={Tutorials} />
                 <Stack.Screen name='Support' options={{ headerShown: true }} component={Support} />
                 <Stack.Screen name='Orders' options={{ headerShown: false }} component={Orders} />
-              </>)
-          }
+              {/* </>
+              )
+          } */}
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider >

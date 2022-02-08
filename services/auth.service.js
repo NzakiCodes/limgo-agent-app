@@ -11,10 +11,15 @@ const register = async (email, phone_number, password) => {
                 'Accept': 'application/json'
             }
         });
+        
+        
     if (response.data.token) {
         AsyncStorage.setItem("user", JSON.stringify(response.data));
         SecureStore.setItemAsync("token", response.data.token);
+        SecureStore.setItemAsync("user_id", response.data.user.id);
     }
+    console.log("Server:" +response);
+    return response.data;
 }
 
 const login = async (email, password) => {
@@ -24,7 +29,9 @@ const login = async (email, password) => {
                 'Accept': 'application/json'
             }
         });
+        console.log("Server"+response.data);
     if (response.data.token) {
+        console.log("Server"+response.data);
         AsyncStorage.setItem("user", JSON.stringify(response.data));
         SecureStore.setItemAsync("token", response.data.token);
     }
@@ -36,6 +43,15 @@ const login = async (email, password) => {
 const logoutUser = async () => {
     await AsyncStorage.removeItem("user");
     await SecureStore.deleteItemAsync("token");
+    await SecureStore.deleteItemAsync("user_id");
+    const response = await axios
+    .post(`${API_URL}/auth/logout`, { }, {
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + await SecureStore.getItemAsync("token")
+        }
+    });
+    return axios.post(`${API_URL}/auth/logout`);
 };
 
 // update user Profile
@@ -43,7 +59,8 @@ const updateProfile = async (user_id, name, email, phone_number, password, passw
     const response = await axios
         .post(`${API_URL}/auth/update-profile`, { user_id, name, email, phone_number, password, password_confirmation }, {
             headers: {
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + await SecureStore.getItemAsync("token")
             }
         });
     return response.data;
