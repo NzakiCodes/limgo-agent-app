@@ -107,7 +107,7 @@ const ChangePassword = ({ route, navigation }) => {
                         label="Change Password"
                         labelStyle={{ fontSize: 16, fontWeight: 'bold' }}
                         style={{ backgroundColor: '#00923f', height: 54, marginVertical: 20, borderRadius: 24 }}
-                        // onPress={() => onSubmit()}
+                        onPress={() => navigation.navigate("Home")}
                     />
                 </View>
             </ScrollView>

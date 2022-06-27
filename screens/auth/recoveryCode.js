@@ -3,6 +3,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, Button } from 'react-native-ui-lib';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
+import TextField from '../../components/atoms/TextField';
+
+import { API_SERVER } from '../../config/constants';
 import AuthApi from '../../api/auth';
 var axios = require('axios');
 var FormData = require('form-data');
@@ -11,63 +14,49 @@ var data = new FormData();
 const backIcon = require("../../assets/icons/chevron-left.png");
 
 
-const RecoveryCode = ({ route, navigation }) => {
+const RecoveryCode = ({ navigation }) => {
     const [code, setCode] = useState('');
     const codeInput = useRef(null);
+    const [password, setPassword] = useState('');
     const [error, setError] = useState({
         errorValue: false,
         message: ""
     })
-    const { email } = route.params;
+
 
     const onFulfill = async () => {
-        var res = await verifyPasswordOTP();
-        if (res.status === 200) {
-            setError({
-                errorValue: false,
-                message: ""
-            })
-            navigation.navigate("UpdatePassword", { email })
-        }
-        else {
-            setError({
-                errorValue: true,
-                message: "Wrong Code"
-            })
-            codeInput.current.shake()
-        }
-
-    }
-
-    async function verifyPasswordOTP() {
-        const body = {
-            'email': email,
-            'code': code
-        }
-        const data = JSON.stringify(body)
-        try {
-            const res = await AuthApi.ForgotPasswordVerify(data);
-            setError({
-                errorValue: false,
-                message: ""
-            })
-            return res;
-        } catch (error) {
-            return error;
+        const res = await requestPasswordOTP();
+        const response = JSON.parse(res)
+        console.log("response")
+        console.log(response)
+        if (response.status === "success") {
+            navigation.navigate('SignIn')
         }
     }
+
     async function requestPasswordOTP() {
-        const body = {
-            'email': email
-        }
-        const data = JSON.stringify(body)
         try {
-            const res = await AuthApi.ForgotPasswordRequest(data);
-            setError({
-                errorValue: false,
-                message: ""
-            })
-            return res;
+            var myHeaders = new Headers();
+            myHeaders.append("Accept", "application/json");
+
+            var formdata = new FormData();
+            formdata.append("otp", code);
+            formdata.append("password", password);
+
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: formdata,
+                redirect: 'follow'
+            };
+
+           return fetch(`${API_SERVER}/auth/reset-password`, requestOptions)
+                .then(response => response.text())
+                .then(result => {
+                    // console.log(result)
+                    return result;
+                })
+                .catch(error => console.log('error', error));
         } catch (error) {
             return error;
         }
@@ -123,9 +112,10 @@ const RecoveryCode = ({ route, navigation }) => {
                         onTextChange={code => setCode(code)}
                     // onFulfill={onFulfill}
                     />
+                    <TextField textBold title={"New Password"} textStyle={{ color: '#ffffff' }} inputStyle={{ backgroundColor: '#ffffff' }} placeholder={"Enter New Password"} securePassword={true} value={password} onChangeText={(text) => setPassword(text)} />
                     <View style={{ marginVertical: 20, paddingHorizontal: 10 }}>
                         <Button
-                            label="Verify"
+                            label="Update Password"
                             labelStyle={{ fontSize: 18, fontWeight: 'bold', color: '#00923f' }}
                             style={{ backgroundColor: '#ffffff', height: 58, marginVertical: 20, borderRadius: 24 }}
                             onPress={() => onFulfill()}
@@ -138,7 +128,7 @@ const RecoveryCode = ({ route, navigation }) => {
                         Didn&apos;t receive it? {' '}
 
                     </Text>
-                    <Button link linkColor="#FDFDFD" onPress={() => requestPasswordOTP()} label="Resend Code" />
+                    <Button link linkColor="#FDFDFD" onPress={() => onFulfill()} label="Resend Code" />
                 </View>
             </ScrollView>
         </SafeAreaView>

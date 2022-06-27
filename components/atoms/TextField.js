@@ -34,6 +34,7 @@ const TextField = (props) => {
                     {...props}
                     secureTextEntry={securePasswordState}
                     placeholder={placeholder ? placeholder : title}
+                    
                     style={{
                         height: 58,
                         borderWidth: borderWidth,

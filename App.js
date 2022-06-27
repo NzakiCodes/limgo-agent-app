@@ -40,6 +40,7 @@ import Register from './screens/auth/register';
 import CalendarScreen from './screens/calendar';
 const Stack = createNativeStackNavigator();
 import { getUserInfo } from './slices/auth';
+import ViewTask from './screens/viewTask';
 
 
 
@@ -105,8 +106,10 @@ const NavigationMainContainer = () => {
           {/* {
             !isLoggedIn ? (
               <> */}
-                <Stack.Screen name='OnBoarding' options={{ headerShown: false }} component={OnBoarding} />
+                
                 <Stack.Screen name='SignIn' options={{ headerShown: false }} component={Login} />
+                <Stack.Screen name='ViewTask' options={{ headerShown: false }} component={ViewTask} />
+                <Stack.Screen name='OnBoarding' options={{ headerShown: false }} component={OnBoarding} />
                 <Stack.Screen name='SignUp' options={{ headerShown: false }} component={SignUp} />
                 <Stack.Screen name='Register' options={{ headerShown: false }} component={Register} />
                 <Stack.Screen name='VerifyPhone' options={{ headerShown: false }} component={VerifyPhone} />

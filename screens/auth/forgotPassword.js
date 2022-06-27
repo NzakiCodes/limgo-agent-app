@@ -5,6 +5,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, Image, Button } from 'react-native-ui-lib';
 import TextField from '../../components/atoms/TextField';
 import AuthApi from '../../api/auth';
+import * as SecureStore from 'expo-secure-store';
+import { API_SERVER } from '../../config/constants';
+
 
 const backIcon = require("../../assets/icons/chevron-left.png");
 
@@ -20,39 +23,55 @@ const ForgotPassword = ({ navigation }) => {
             Alert.alert('Enter Email', 'Please Enter an Email')
             return 0
         } else {
-            var res = await requestPasswordOTP();
-            if (res.status === 200) {
-                setError({
-                    errorValue: false,
-                    message: ""
-                })
-                navigation.navigate("RecoveryCode",{email})
-            }
-            else {
-                setError({
-                    errorValue: true,
-                    message: "Invalid Email"
-                })
+            const res = await requestPasswordOTP();
+            const response = JSON.parse(res)
+            // console.log("response")
+            // console.log(response)
+            if (response.status === "success") {
+                navigation.navigate('RecoveryCode', { email: email })
             }
 
         }
     }
 
     async function requestPasswordOTP() {
-        const body = {
-            'email': email
-        }
-        const data = JSON.stringify(body)
+
+        const token = SecureStore.getItemAsync('token');
+        var myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        // const data = JSON.stringify(body)
         try {
-            const res = await AuthApi.ForgotPasswordRequest(data);
-            setError({
-                errorValue: false,
-                message: ""
-            })
-            setEmail(body.email)
-            return res;
+
+            const body = {
+                'email': email
+            }
+            var formdata = new FormData();
+            formdata.append("email", email);
+
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: formdata,
+                redirect: 'follow'
+            };
+
+            return fetch(`${API_SERVER}/auth/forgot-password`, requestOptions)
+                .then(response => response.text())
+                .then(result => {
+                    // console.log(result)
+                    return result
+                })
+                .catch(error => {
+                    setError({
+                        errorValue: true,
+                        message: error.message
+                    })
+                    console.log('error', error)
+                    return null
+                });
+
         } catch (error) {
-            setEmail(body.email)
+
             return error;
         }
     }
@@ -73,12 +92,12 @@ const ForgotPassword = ({ navigation }) => {
                 </View>
                 <Text></Text>
                 <View style={{ marginVertical: 20 }}>
-                {error.errorValue === true &&
-                    <View style={{ backgroundColor: "#e90000", color: "#ffffff",borderRadius:14,marginBottom:-23 }}>
-                        {error.errorValue === true ? <Text style={{ color: "#ffffff",padding:12,fontSize:18 }}>{error.message} !</Text> : <Text>""</Text>}
-                    </View>
-                }
-                    <TextField error={error.errorValue} placeholder={"Enter Email address"} placeholderTextColor={"#2E384D"} inputStyle={{ backgroundColor: '#ffffff', opacity: 0.9 }}  onChangeText={(text) => setEmail(text)} />
+                    {error.errorValue === true &&
+                        <View style={{ backgroundColor: "#e90000", color: "#ffffff", borderRadius: 14, marginBottom: -23 }}>
+                            {error.errorValue === true ? <Text style={{ color: "#ffffff", padding: 12, fontSize: 18 }}>{error.message} !</Text> : <Text>""</Text>}
+                        </View>
+                    }
+                    <TextField error={error.errorValue} placeholder={"Enter Email address"} placeholderTextColor={"#2E384D"} inputStyle={{ backgroundColor: '#ffffff', opacity: 0.9 }} onChangeText={(text) => setEmail(text)} />
                     <Button
                         label="Request"
                         labelStyle={{ fontSize: 18, fontWeight: 'bold', color: "#FDFDFD" }}

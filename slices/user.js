@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { setMessage } from "./authMessage";
+import { getTask} from './task'
 import AuthService from "../services/auth.service";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
@@ -15,6 +16,7 @@ export const getUserInfo = createAsyncThunk(
     async ({}, thunkAPI) => {
         try {
             const res = await userService.getAuthUser();
+            thunkAPI.dispatch(getTask())
             return { user: res.data }
         } catch (error) {
             const message =
