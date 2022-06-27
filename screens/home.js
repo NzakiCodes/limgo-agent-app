@@ -204,7 +204,7 @@ export default function HomeScreen({ navigation }) {
                   // style={{backgroundColor:'#00923F7D'}}
                   value={dutyState}
                   onValueChange={() => setDutyStateHandler(!dutyState)}
-                  style={{ marginBottom: 20 }}
+                  // style={{ marginBottom: 20 }}
                 />
               </View>
             </View>
@@ -257,11 +257,13 @@ const taskButtonStyle = StyleSheet.create({
     paddingVertical: 18,
     paddingHorizontal: 16,
     justifyContent: "space-between",
+    alignItems:'center',
+    alignContent:'center'
   },
   buttonText: {
     color: "#ffffff",
     fontSize: 16,
-    lineHeight: 29,
+    // lineHeight: 29,
   },
   button: {
     flexDirection: "row",
@@ -362,14 +364,15 @@ const styles = StyleSheet.create({
     lineHeight: 32,
   },
   switchContainer: {
-    height: 60,
+    height: 30,
     width: "100%",
-    marginVertical: 29,
+    marginVertical: 17,
     flex: 1,
     justifyContent: "space-between",
     flexDirection: "row",
+    alignItems:"center",
     paddingHorizontal: 22,
-    paddingVertical: 20,
+    // paddingVertical: 5,
   },
   switchText: {
     color: "#ffff",
@@ -380,6 +383,7 @@ const styles = StyleSheet.create({
   },
   switchButton: {
     // width: '100%'
+    // marginVertical:15
   },
   menu: {
     position: "absolute",

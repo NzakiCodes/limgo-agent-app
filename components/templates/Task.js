@@ -11,6 +11,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import * as SecureStore from "expo-secure-store";
 import { useNavigation } from "@react-navigation/native";
 import userService from "../../services/user.service";
+import moment from "moment";
 const pInitials = require("../../assets/images/p.png");
 const dInitials = require("../../assets/images/d.png");
 
@@ -173,7 +174,7 @@ export const TaskItem = (props) => {
           </Text>
         </View>
         <View style={styles.taskTimeContainer}>
-          <Text style={styles.taskTime}>{taskDetails.created_at} </Text>
+          <Text style={styles.taskTime}> {moment(taskDetails.created_at).format('LL')} </Text>
           <Text
             style={[
               styles.taskTime,
@@ -276,7 +277,7 @@ const styles = StyleSheet.create({
   },
   task: {},
   taskTitle: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: "bold",
     color: "#959DAD",
     lineHeight: 37,
@@ -284,7 +285,7 @@ const styles = StyleSheet.create({
     // marginBottom: 10
   },
   taskDetails: {
-    fontSize: 16,
+    fontSize: 12,
     color: "#454F63",
     // marginBottom: 10,
     marginLeft: 20,
@@ -293,14 +294,14 @@ const styles = StyleSheet.create({
   },
   taskTimeContainer: {
     position: "absolute",
-    right: 20,
-    top: 20,
+    right: 10,
+    top: 32,
     flexDirection: "row-reverse",
   },
   taskTime: {
-    fontSize: 11,
+    fontSize: 9,
     color: "#4b4d5a",
-    marginBottom: 10,
+    marginBottom: 15,
     fontWeight: "bold",
     textTransform: "capitalize",
     marginRight: 5,
@@ -317,6 +318,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 20,
     marginHorizontal: 4,
+    marginTop: 10,
   },
   taskButton: {
     backgroundColor: "#00923F",
