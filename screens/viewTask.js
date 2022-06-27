@@ -3,19 +3,13 @@ import { Text, View, TouchableOpacity, Image } from "react-native-ui-lib";
 import { Alert, StyleSheet, Linking } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import RidersMap from "../components/organisms/Maps/RidersMap";
-import * as SecureStore from "expo-secure-store";
-import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import userService from "../services/user.service";
 
 const iconsDots = require("../assets/images/icons-chevron-light.png");
-const filterButton = require("../assets/images/filter.png");
-const expanButton = require("../assets/images/icons-dots.png");
-
 const pInitials = require("../assets/images/p.png");
 const dInitials = require("../assets/images/d.png");
 const startPickup = require("../assets/images/startPickup.png");
-const LocationArrow = require("../assets/images/LocationArrow.png");
 import moment from "moment";
 
 export const callNumber = (phone) => {
@@ -147,7 +141,7 @@ export default function ViewTask({ route, navigation }) {
                   justifyContent: "space-between",
                 }}
               >
-                <View style={{ width: "75%" }}>
+                <View style={{ width: "100%" }}>
                   <TaskItem
                     time={
                       taskDetails &&
@@ -157,9 +151,9 @@ export default function ViewTask({ route, navigation }) {
                     destination={destination}
                   />
                 </View>
-                <View style={{ width: "15%" }}>
+                {/* <View style={{ width: "5%" }}>
                   <Image source={LocationArrow} />
-                </View>
+                </View> */}
               </View>
               <View></View>
             </View>
@@ -234,7 +228,7 @@ const TaskItem = (props) => {
         <Text style={styles.taskDetails}>{pickup}</Text>
       </View>
       <View style={styles.taskTimeContainer}>
-        <Text style={styles.taskTime}>{time} </Text>
+        <Text style={styles.taskTime}>{moment(time).format('LL')} </Text>
       </View>
       <View
         style={{
@@ -357,16 +351,17 @@ const styles = StyleSheet.create({
     width: "100%",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    height: 351,
+    maxHeight: 351,
+    height: 335,
     zIndex: 10,
     position: "absolute",
     bottom: 0,
     left: 0,
     right: 1,
-    paddingVertical: 34,
+    paddingTop: 34,
   },
   slideOutBottom: {
-    paddingHorizontal: 22,
+    paddingHorizontal: 12,
   },
   greetingText: {
     fontSize: 22,
@@ -381,14 +376,15 @@ const styles = StyleSheet.create({
     lineHeight: 32,
   },
   switchContainer: {
-    height: 70,
+    maxHeight: 80,
     width: "100%",
     // marginVertical: 29,
     flex: 1,
     justifyContent: "space-between",
     flexDirection: "row",
-    paddingHorizontal: 12,
-    paddingVertical: 20,
+    alignItems:'center',
+    paddingHorizontal: 2,
+    paddingVertical: 5,
   },
   switchText: {
     color: "#ffffff",
@@ -423,7 +419,7 @@ const styles = StyleSheet.create({
     // marginRight: 10
   },
   taskDetails: {
-    fontSize: 16,
+    fontSize: 12,
     color: "rgba(214, 214, 214, 0.5)",
     marginLeft: 20,
     lineHeight: 19,
@@ -431,7 +427,7 @@ const styles = StyleSheet.create({
   taskTimeContainer: {
     position: "absolute",
     right: 20,
-    top: 20,
+    top: 10,
   },
   taskTime: {
     fontSize: 11,

@@ -85,16 +85,16 @@ const Profile = () => {
                     }}>
                         <Button
                             label={"Change Password"}
-                            labelStyle={{ fontSize: 14, fontWeight: 'bold' }}
-                            style={{ height: 58, borderRadius: 24, width: '48.9%' }}
+                            labelStyle={{ fontSize: 12, fontWeight: 'bold' }}
+                            style={{ height: 55, borderRadius: 9999, width: '48.9%' }}
                             onPress={() => navigation.navigate("ChangePassword")}
                             backgroundColor="#4B4D5A"
                             disabledBackgroundColor="#a1a1a1"
                         />
                         <Button
                             label={"Edit Profile"}
-                            labelStyle={{ fontSize: 14, fontWeight: 'bold' }}
-                            style={{ height: 58, borderRadius: 24, width: '48.9%' }}
+                            labelStyle={{ fontSize: 12, fontWeight: 'bold' }}
+                            style={{ height: 55, borderRadius: 9999, width: '48.9%' }}
                             onPress={() => editProfile()}
                             disabled={loading}
                             backgroundColor="#00923f"

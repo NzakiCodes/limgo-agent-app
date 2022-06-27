@@ -73,12 +73,12 @@ const Login = ({ navigation, route }) => {
       });
   };
   return (
-    <SafeAreaView style={{ marginVertical: 45, marginHorizontal: 30 }}>
+    <SafeAreaView style={{ marginVertical: 20, marginHorizontal: 30 }}>
       <ScrollView>
         <View style={{ alignItems: "center", marginVertical: 45 }}>
           <Image style={{ width: 118, height: 84 }} source={logo} />
         </View>
-        <Text black text30BL style={{ fontWeight: "bold" }}>
+        <Text black text40BL style={{ fontWeight: "bold" }}>
           Sign In
         </Text>
         <Text grey30>Welcome Back to Limgo Logistics</Text>
@@ -89,7 +89,7 @@ const Login = ({ navigation, route }) => {
               color: "#ffffff",
               padding: 10,
               borderRadius: 14,
-              marginTop: 10,
+              marginTop: 5,
             }}
           >
             {error.errorValue === true ? (
@@ -107,7 +107,7 @@ const Login = ({ navigation, route }) => {
         >
           {({ handleChange, handleBlur, handleSubmit, values }) => (
             <View>
-              <View style={{ marginVertical: 20 }}>
+              <View style={{ marginVertical: 10 }}>
                 <TextField
                   // error={error.errorValue}
                   textBold
@@ -127,8 +127,9 @@ const Login = ({ navigation, route }) => {
                   onPress={() => navigation.navigate("ForgotPassword")}
                   link
                   linkColor="#00923F"
-                  style={{ color: "#00923F", alignSelf: "flex-end" }}
+                  style={{ color: "#00923F", alignSelf: "flex-end", }}
                   label="Forgot Passwords?"
+                  text90
                 />
                 <Button
                   label={!loading ? "Login" : " "}
@@ -149,13 +150,14 @@ const Login = ({ navigation, route }) => {
                   flexDirection: "row",
                   position: "absolute",
                   bottom: 0,
-                  left: "20%",
+                  margin:'auto'
+                  // left: "20%",
                 }}
               >
                 <Text
                   style={{
                     color: "#4B4D5A",
-                    fontSize: 15,
+                    fontSize: 13,
                     textAlign: "center",
                   }}
                 >
@@ -164,6 +166,7 @@ const Login = ({ navigation, route }) => {
                 <Button
                   onPress={() => navigation.navigate("SignUp")}
                   link
+                  text90
                   linkColor="#00923F"
                   label="Sign Up"
                 />

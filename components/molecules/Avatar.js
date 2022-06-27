@@ -32,7 +32,8 @@ const styles = StyleSheet.create({
     },
     img: {
         width: 89,
-        height: 89
+        height: 89,
+        borderRadius:9999
     },
     edit: {
         width: 30,

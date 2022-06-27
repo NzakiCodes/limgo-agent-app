@@ -86,8 +86,8 @@ const ForgotPassword = ({ navigation }) => {
                         backgroundColor={"#00923F"}
                         onPress={() => navigation.goBack()}
                     />
-                    <Text white text20BL style={{ fontWeight: "bold", width: 255 }}>Forgot password?</Text>
-                    <Text color="#FDFDFD" style={{ opacity: 0.7, fontSize: 14 }}  >The recovery code was sent to your email. Please enter the code:</Text>
+                    <Text white text40BL style={{ fontWeight: "bold", width: 255 }}>Forgot password?</Text>
+                    <Text color="#FDFDFD" style={{ opacity: 0.7, fontSize: 14 }}  >Please enter  your email:</Text>
 
                 </View>
                 <Text></Text>
@@ -100,8 +100,8 @@ const ForgotPassword = ({ navigation }) => {
                     <TextField error={error.errorValue} placeholder={"Enter Email address"} placeholderTextColor={"#2E384D"} inputStyle={{ backgroundColor: '#ffffff', opacity: 0.9 }} onChangeText={(text) => setEmail(text)} />
                     <Button
                         label="Request"
-                        labelStyle={{ fontSize: 18, fontWeight: 'bold', color: "#FDFDFD" }}
-                        style={{ backgroundColor: '#333333', height: 58, marginVertical: 20, borderRadius: 24 }}
+                        labelStyle={{ fontSize: 16, fontWeight: 'bold', color: "#FDFDFD" }}
+                        style={{ backgroundColor: '#333333', height: 55, marginVertical: 20, borderRadius: 9999 }}
                         onPress={() => onSubmit()}
                     />
                 </View>

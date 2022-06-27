@@ -25,8 +25,8 @@ const TextField = (props) => {
             <Text
                 style={{
                     fontWeight: textBold ? 'bold' : 'normal',
-                    fontSize: 16,
-                    lineHeight: 32,
+                    fontSize: 14,
+                    lineHeight: 30,
                     ...textStyle
                 }}>{title}</Text>
             <View>
@@ -39,14 +39,14 @@ const TextField = (props) => {
                         height: 58,
                         borderWidth: borderWidth,
                         paddingHorizontal: 20,
-                        paddingTop: 10,
+                        paddingTop: 5,
                         paddingBottom: 5,
-                        marginVertical: 5,
+                        marginVertical: 1,
                         borderColor: `${error ? "#e90000" : "#D6D6D6"}`,
-                        borderRadius: 24,
-                        fontSize: 18,
+                        borderRadius: 9999,
+                        fontSize: 14,
                         // fontStyle: 'italic',
-                        color: `${error ? "#e90000" : "#00923F"}`,
+                        color: `${error ? "#e90000" : "#000000"}`,
                         ...inputStyle
                     }}
                     editable={locked ? false : true}
@@ -58,7 +58,7 @@ const TextField = (props) => {
                 />
                 {
                     securePassword ?
-                        <Pressable style={{ top: 24, right: 16, position: 'absolute', }} onPress={changeVisibility}>
+                        <Pressable style={{ top: 18, right: 18, position: 'absolute', }} onPress={changeVisibility}>
                             {
                                 securePasswordState === true ? <Image style={{ width: 25, height: 19 }} source={passwordHidden} /> : <Image style={{ width: 23, height: 16, marginTop: 3, marginRight: 2.5 }} source={passwordvisible} />
                             }
