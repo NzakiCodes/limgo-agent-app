@@ -42,12 +42,6 @@ export default function ViewTask({ route, navigation }) {
   const [taskId, setTaskId] = useState(null);
   const [coordinates, setCoordinates] = useState(null);
   const { pickup, destination, type, task_id } = route.params;
-  // console.log(route);
-
-  useEffect(async () => {
-    setTaskId(task_id);
-    console.log(route);
-  }, [task_id]);
 
   const activityCodes = [
     { code: "arrived_for_pickup" },
@@ -63,6 +57,10 @@ export default function ViewTask({ route, navigation }) {
     { message: "Arrived", nextActivityCode: "arrived_for_delivery" },
     { message: "Confirm Delivery", nextActivityCode: "delivery_confirmed" },
   ];
+  useEffect(async () => {
+    setTaskId(task_id);
+  }, [task_id]);
+
 
   useEffect(async () => {
     const user = await AsyncStorage.getItem("user");
@@ -86,11 +84,14 @@ export default function ViewTask({ route, navigation }) {
       const viewTask = await userService.getSingleTask(task_id);
       const res = await viewTask.json();
       setTaskDetails(res.data);
-      // console.log(res.data);
+      // console.log(res.data.shipment.activities_log.length);
       setActivityLogSize(res.data.shipment.activities_log.length);
+
+      
       const res2 = await getGeometryFromAddress(res.data.shipment.pickup_point);
-      // console.log(res.geometry.location);
+
       const { lat, lng } = res2.geometry.location;
+
       setCoordinates({
         latitude: lat,
         longitude: lng,
@@ -98,8 +99,6 @@ export default function ViewTask({ route, navigation }) {
 
       setLoading(false);
     } catch (error) {
-      // setError(error);
-      // setLoading(false);
       console.log(error);
     }
   }
@@ -109,7 +108,6 @@ export default function ViewTask({ route, navigation }) {
       const updateTask = await userService.updateTaskProgress(taskId, code);
       const res = await updateTask.json();
 
-      console.log(res);
       if (res?.status === "fail") {
         Alert.alert("Failed", res.message, [
           { text: "Cancel", style: "destructive" },
@@ -134,9 +132,8 @@ export default function ViewTask({ route, navigation }) {
 
   return (
     <View>
-      {coordinates ? <StatusBar style='dark' />:<StatusBar style='light' />}
+      {coordinates ? <StatusBar style="dark" /> : <StatusBar style="light" />}
       <SafeAreaView style={styles.container}>
-
         <View style={styles.mapContainer}>
           <View style={styles.slideOutBottomContainer}>
             <View style={styles.slideOutBottom}>
@@ -158,9 +155,6 @@ export default function ViewTask({ route, navigation }) {
                     destination={destination}
                   />
                 </View>
-                {/* <View style={{ width: "5%" }}>
-                  <Image source={LocationArrow} />
-                </View> */}
               </View>
               <View></View>
             </View>
@@ -178,19 +172,26 @@ export default function ViewTask({ route, navigation }) {
                   alignItems: "center",
                   flexDirection: "row",
                 }}
-                onPress={() =>
-                  updateTaskProgress(
-                    nextActivities[activityLogSize].nextActivityCode
-                  )
-                }
+                onPress={() => {
+                  if (activityLogSize !== null && activityLogSize > 4) {
+                    // console.log("Done");
+                    navigation.navigate("Review")
+                    return;
+                  } else {
+                    updateTaskProgress(
+                      nextActivities[activityLogSize].nextActivityCode
+                    );
+                  }
+                }}
                 disabled={loading}
               >
                 <View>{!loading && <Image source={startPickup} />}</View>
                 <Text style={[styles.switchText, { alignSelf: "center" }]}>
                   {loading
                     ? "Loading..."
-                    : activityLogSize !== null &&
-                      nextActivities[activityLogSize].message}
+                    : activityLogSize !== null && activityLogSize > 4
+                    ? "Review"
+                    : activityLogSize !== null && nextActivities[activityLogSize].message}
                 </Text>
                 <Text
                   style={[
@@ -217,14 +218,14 @@ export default function ViewTask({ route, navigation }) {
                 source={iconsDots}
               />
             </TouchableOpacity>
-            <View style={{marginTop:-200}}>
-            {coordinates && (
-              <RidersMap
-                pointer={true}
-                coordinates={coordinates}
-                title={`Pickup Point`}
-              />
-            )}
+            <View style={{ marginTop: -200 }}>
+              {coordinates && (
+                <RidersMap
+                  pointer={true}
+                  coordinates={coordinates}
+                  title={`Pickup Point`}
+                />
+              )}
             </View>
           </View>
         </View>

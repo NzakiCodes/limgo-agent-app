@@ -43,6 +43,7 @@ import { getUserInfo } from './slices/auth';
 import ViewTask from './screens/viewTask';
 import TaskDetails from './screens/features/taskDetails';
 import Task from './components/templates/Task';
+import Rating from './screens/rating/rating';
 
 
 
@@ -133,6 +134,7 @@ const NavigationMainContainer = () => {
                 <Stack.Screen name='Orders' options={{ headerShown: false }} component={Orders} />
                 <Stack.Screen name='TaskDetails' options={{ headerShown: false }} component={TaskDetails} />
                 <Stack.Screen name='Tasks' options={{ headerShown: true }} component={Task} />
+                <Stack.Screen name='Review' options={{ headerShown: true }} component={Rating} />
               {/* </>
               )
           } */}
