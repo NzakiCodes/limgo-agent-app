@@ -16,6 +16,7 @@ import * as SecureStore from "expo-secure-store";
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import userService from "../services/user.service";
+import moment from "moment";
 
 const menuButton = require("../assets/images/menu.png");
 const filterButton = require("../assets/images/filter.png");
@@ -154,7 +155,7 @@ export default function HomeScreen({ navigation }) {
                   style={styles.dateButton}
                   onPress={() => navigation.navigate("CalendarScreen")}
                 >
-                  <Text style={styles.heading}>February, 19</Text>
+                  <Text style={styles.heading}>{moment().format('LL')}</Text>
                 </TouchableOpacity>
               </View>
               <View style={{opacity:0, width:0}}>

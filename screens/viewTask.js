@@ -175,7 +175,8 @@ export default function ViewTask({ route, navigation }) {
                 onPress={() => {
                   if (activityLogSize !== null && activityLogSize > 4) {
                     // console.log("Done");
-                    navigation.navigate("Review")
+                    navigation.navigate("Home")
+                    // navigation.navigate("Review")
                     return;
                   } else {
                     updateTaskProgress(
@@ -190,7 +191,7 @@ export default function ViewTask({ route, navigation }) {
                   {loading
                     ? "Loading..."
                     : activityLogSize !== null && activityLogSize > 4
-                    ? "Review"
+                    ? "Complete"
                     : activityLogSize !== null && nextActivities[activityLogSize].message}
                 </Text>
                 <Text
