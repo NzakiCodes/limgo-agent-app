@@ -96,7 +96,11 @@ const History = () => {
           [chatIcon ]
         </Text>
       </View>
-      <ScrollView style={styles.main}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        style={styles.main}
+      >
         {historyList === null && (
           <View
             style={{
@@ -136,6 +140,7 @@ const History = () => {
                   time={item.created_at}
                   itemDetails={item}
                   view={(e) => viewTask(e)}
+                  isHistory={true}
                 />
               );
             })}

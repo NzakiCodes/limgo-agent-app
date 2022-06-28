@@ -6,7 +6,7 @@ import {
   Image,
   Switch,
 } from "react-native-ui-lib";
-import { StyleSheet } from "react-native";
+import { Pressable, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import RidersMap from "../components/organisms/Maps/RidersMap";
 import Menu from "../components/organisms/Menu";
@@ -129,11 +129,11 @@ export default function HomeScreen({ navigation }) {
           />
         </View>
       )}
-      {isTaskList && (
+      {/* {isTaskList && (
         <View style={[styles.menu]}>
           <Task closeTask={() => setTaskList(false)} tasks={tasks} />
         </View>
-      )}
+      )} */}
       {
         // console.log(isTaskList)
       }
@@ -213,7 +213,7 @@ export default function HomeScreen({ navigation }) {
             <View>
               <TaskButton
                 taskCount={tasks ? tasks.length : 0}
-                onPress={() => setTaskList(true)}
+                onPress={() => navigation.navigate("Tasks",{tasks:tasks})}
               />
             </View>
             <RidersMap coordinates={coordinates} title={"Rider"} />
@@ -227,17 +227,17 @@ const TaskButton = (props) => {
   const { taskCount = 199 } = props;
   const taskCountCheck = taskCount > 100 ? "99+" : taskCount;
   return (
-    <View style={taskButtonStyle.container}>
+    <TouchableOpacity  {...props} style={taskButtonStyle.container}>
       <View style={taskButtonStyle.content}>
         <Text style={taskButtonStyle.buttonText}>View Task(s)</Text>
-        <TouchableOpacity {...props} style={taskButtonStyle.button}>
+        <View  style={taskButtonStyle.button}>
           <View style={taskButtonStyle.badge}>
             <Text style={taskButtonStyle.badgeText}>{taskCountCheck}</Text>
           </View>
           <Image style={{ width: 24, height: 24 }} source={expanButton} />
-        </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

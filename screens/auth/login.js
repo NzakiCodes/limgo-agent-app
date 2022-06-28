@@ -74,7 +74,8 @@ const Login = ({ navigation, route }) => {
   };
   return (
     <SafeAreaView style={{ marginVertical: 20, marginHorizontal: 30 }}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}>
         <View style={{ alignItems: "center", marginVertical: 45 }}>
           <Image style={{ width: 118, height: 84 }} source={logo} />
         </View>

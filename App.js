@@ -41,6 +41,8 @@ import CalendarScreen from './screens/calendar';
 const Stack = createNativeStackNavigator();
 import { getUserInfo } from './slices/auth';
 import ViewTask from './screens/viewTask';
+import TaskDetails from './screens/features/taskDetails';
+import Task from './components/templates/Task';
 
 
 
@@ -129,6 +131,8 @@ const NavigationMainContainer = () => {
                 <Stack.Screen name='Tutorials' options={{ headerShown: true }} component={Tutorials} />
                 <Stack.Screen name='Support' options={{ headerShown: true }} component={Support} />
                 <Stack.Screen name='Orders' options={{ headerShown: false }} component={Orders} />
+                <Stack.Screen name='TaskDetails' options={{ headerShown: false }} component={TaskDetails} />
+                <Stack.Screen name='Tasks' options={{ headerShown: true }} component={Task} />
               {/* </>
               )
           } */}

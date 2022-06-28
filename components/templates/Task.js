@@ -15,12 +15,12 @@ import moment from "moment";
 const pInitials = require("../../assets/images/p.png");
 const dInitials = require("../../assets/images/d.png");
 
-const Task = ({ closeTask, tasks }) => {
+const Task = ({ route }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-
+  const { tasks } = route.params;
   const navigation = useNavigation();
 
   const closeTaskList = (e) => {
@@ -51,7 +51,8 @@ const Task = ({ closeTask, tasks }) => {
         navigation.navigate("ViewTask", {
           pickup: res.data.shipment.pickup_point,
           destination: res.data.shipment.delivery_point,
-          type: "accept",
+          type: "view",
+          task_id: task_id,
         });
       }
     } catch (error) {
@@ -59,7 +60,7 @@ const Task = ({ closeTask, tasks }) => {
     }
   }
 
-   async function declineTask(e) {
+  async function declineTask(e) {
     // navigation.navigate("ViewTask", { pickup, destination });
     const task_id = e.id;
     // const shipment_id = e.shipment.id;
@@ -68,13 +69,13 @@ const Task = ({ closeTask, tasks }) => {
     try {
       const declineTaskReq = await userService.declineTask({
         task_id,
-        note
+        note,
       });
       const res = await declineTaskReq.json();
       console.log(res.status);
       if (res.status === "success") {
         // navigation.navigate("Home");
-        closeTask()
+        closeTask();
       }
     } catch (error) {
       console.log(error);
@@ -94,7 +95,7 @@ const Task = ({ closeTask, tasks }) => {
           pickup: res.data.shipment.pickup_point,
           destination: res.data.shipment.delivery_point,
           type: "view",
-          task_id:task_id
+          task_id: task_id,
         });
       }
     } catch (error) {
@@ -131,9 +132,20 @@ const Task = ({ closeTask, tasks }) => {
     </View>
   );
 };
+
 export const TaskItem = (props) => {
-  const { time, pickup, destination, itemDetails, view, accept, decline } =
-    props;
+  const {
+    time,
+    pickup,
+    destination,
+    itemDetails,
+    view,
+    accept,
+    decline,
+    isHistory,
+    isViewOnly,
+  } = props;
+  const navigation = useNavigation();
 
   const [taskDetails, setTaskDetails] = useState(null);
 
@@ -173,24 +185,30 @@ export const TaskItem = (props) => {
               taskDetails.shipment.pickup_point[0]}
           </Text>
         </View>
-        <View style={styles.taskTimeContainer}>
-          <Text style={styles.taskTime}> {moment(taskDetails.created_at).format('LL')} </Text>
-          <Text
-            style={[
-              styles.taskTime,
-              {
-                color:
-                  taskDetails.status === "in_progress"
-                    ? "#FFB900"
-                    : taskDetails.status === "declined"
-                    ? "#E90000"
-                    : "#00923F",
-              },
-            ]}
-          >
-            {taskDetails.status.replace(/_/g, " ")}{" "}
-          </Text>
-        </View>
+        {!isViewOnly && (
+          <View style={styles.taskTimeContainer}>
+            <Text style={styles.taskTime}>
+              {" "}
+              {moment(taskDetails.created_at).format("LL")}{" "}
+            </Text>
+            <Text
+              style={[
+                styles.taskTime,
+                {
+                  color:
+                    taskDetails.status === "in_progress"
+                      ? "#FFB900"
+                      : taskDetails.status === "declined"
+                      ? "#E90000"
+                      : "#00923F",
+                },
+              ]}
+            >
+              {taskDetails.status.replace(/_/g, " ")}{" "}
+            </Text>
+          </View>
+        )}
+
         <View
           style={{
             borderTopColor: "rgba(244, 244, 246, 0.99)",
@@ -208,7 +226,7 @@ export const TaskItem = (props) => {
             .
           </Text>
         </View>
-        {taskDetails.status === "pending" ? (
+        {taskDetails.status === "pending" && !isHistory && !isViewOnly ? (
           <View style={styles.taskButtonContainer}>
             <TouchableOpacity
               style={[styles.taskButton, styles.taskButtonDecline]}
@@ -223,7 +241,9 @@ export const TaskItem = (props) => {
               <Text style={styles.taskButtonAcceptText}>Accept</Text>
             </TouchableOpacity>
           </View>
-        ) : taskDetails.status === "in_progress" ? (
+        ) : taskDetails.status === "in_progress" &&
+          !isHistory &&
+          !isViewOnly ? (
           <View style={styles.taskButtonContainer}>
             <TouchableOpacity
               style={[styles.taskButton, styles.taskButtonAccept]}
@@ -232,8 +252,19 @@ export const TaskItem = (props) => {
               <Text style={styles.taskButtonAcceptText}>View Task</Text>
             </TouchableOpacity>
           </View>
+        ) : isHistory ? (
+          <View style={styles.taskButtonContainer}>
+            <TouchableOpacity
+              style={[styles.taskButton, styles.taskButtonAccept]}
+              onPress={() =>
+                navigation.navigate("TaskDetails", { task_id: taskDetails.id })
+              }
+            >
+              <Text style={styles.taskButtonAcceptText}>View Task</Text>
+            </TouchableOpacity>
+          </View>
         ) : (
-          <View></View>
+          <View style={styles.taskButtonContainer}></View>
         )}
       </View>
     );

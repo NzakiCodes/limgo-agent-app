@@ -282,7 +282,7 @@ async function startPickup({ task_id, code }) {
   }
 }
 
-async function updateTaskProgress({ task_id, code }) {
+async function updateTaskProgress( task_id, code ) {
   const user = await AsyncStorage.getItem("user");
   const userJSON = JSON.parse(user);
   const token = userJSON.data.token;

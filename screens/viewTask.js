@@ -11,6 +11,8 @@ const pInitials = require("../assets/images/p.png");
 const dInitials = require("../assets/images/d.png");
 const startPickup = require("../assets/images/startPickup.png");
 import moment from "moment";
+import { getGeometryFromAddress } from "../utils/geocode";
+import { StatusBar } from "expo-status-bar";
 
 export const callNumber = (phone) => {
   console.log("callNumber ----> ", phone);
@@ -38,11 +40,13 @@ export default function ViewTask({ route, navigation }) {
   const [activityLogSize, setActivityLogSize] = useState(null);
   const [loading, setLoading] = useState(false);
   const [taskId, setTaskId] = useState(null);
+  const [coordinates, setCoordinates] = useState(null);
   const { pickup, destination, type, task_id } = route.params;
   // console.log(route);
 
   useEffect(async () => {
     setTaskId(task_id);
+    console.log(route);
   }, [task_id]);
 
   const activityCodes = [
@@ -82,10 +86,16 @@ export default function ViewTask({ route, navigation }) {
       const viewTask = await userService.getSingleTask(task_id);
       const res = await viewTask.json();
       setTaskDetails(res.data);
-      console.log(res.data);
-      setActivityLogSize(res.data.shipment.activities_log.length);
-      // console.log(res.data.shipment.activities_log);
       // console.log(res.data);
+      setActivityLogSize(res.data.shipment.activities_log.length);
+      const res2 = await getGeometryFromAddress(res.data.shipment.pickup_point);
+      // console.log(res.geometry.location);
+      const { lat, lng } = res2.geometry.location;
+      setCoordinates({
+        latitude: lat,
+        longitude: lng,
+      });
+
       setLoading(false);
     } catch (error) {
       // setError(error);
@@ -122,14 +132,11 @@ export default function ViewTask({ route, navigation }) {
     });
   };
 
-  const coordinates = {
-    latitude: 5.034611,
-    longitude: 7.928292,
-  };
-
   return (
     <View>
+      {coordinates ? <StatusBar style='dark' />:<StatusBar style='light' />}
       <SafeAreaView style={styles.container}>
+
         <View style={styles.mapContainer}>
           <View style={styles.slideOutBottomContainer}>
             <View style={styles.slideOutBottom}>
@@ -210,7 +217,15 @@ export default function ViewTask({ route, navigation }) {
                 source={iconsDots}
               />
             </TouchableOpacity>
-            <RidersMap coordinates={coordinates} title={"Rider"} />
+            <View style={{marginTop:-200}}>
+            {coordinates && (
+              <RidersMap
+                pointer={true}
+                coordinates={coordinates}
+                title={`Pickup Point`}
+              />
+            )}
+            </View>
           </View>
         </View>
       </SafeAreaView>
@@ -228,7 +243,7 @@ const TaskItem = (props) => {
         <Text style={styles.taskDetails}>{pickup}</Text>
       </View>
       <View style={styles.taskTimeContainer}>
-        <Text style={styles.taskTime}>{moment(time).format('LL')} </Text>
+        <Text style={styles.taskTime}>{moment(time).format("LL")} </Text>
       </View>
       <View
         style={{
@@ -382,7 +397,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
     flexDirection: "row",
-    alignItems:'center',
+    alignItems: "center",
     paddingHorizontal: 2,
     paddingVertical: 5,
   },
