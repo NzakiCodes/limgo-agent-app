@@ -175,8 +175,8 @@ export default function ViewTask({ route, navigation }) {
                 onPress={() => {
                   if (activityLogSize !== null && activityLogSize > 4) {
                     // console.log("Done");
-                    navigation.navigate("Home")
-                    // navigation.navigate("Review")
+                    // navigation.navigate("Home")
+                    navigation.navigate("CompletedTask")
                     return;
                   } else {
                     updateTaskProgress(
